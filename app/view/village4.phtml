@@ -1,0 +1,319 @@
+<?php
+
+/**
+*
+* @   Script Name :   village4.phtml
+* @   Author      :   NIKO28
+* @   Skype       :   nicolo3767
+* @   Project     :   DBOOR Full Decoded
+*
+**/
+ 
+require_once( LANG_UI_PATH . "village4.php" );
+if($this->accountPlus( 0 ) > 0){
+echo "<h1>";
+echo LANGUI_VIL4_T1;
+echo "</h1>\r\n\r\n<div id=\"textmenu\">\r\n <a href=\"village4.php\"";
+if ( $this->selectedTabIndex == 0 ) {
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_VIL4_T1;
+echo "</a>\r\n | <a href=\"village4.php?t=1\"";
+if ( $this->selectedTabIndex == 1 ) {
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_VIL4_T2;
+echo "</a>\r\n | <a href=\"village4.php?t=2\"";
+if ( $this->selectedTabIndex == 2 ) {
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_VIL4_T3;
+echo "</a>\r\n | <a href=\"village4.php?t=3\"";
+if ( $this->selectedTabIndex == 3 ) {
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_VIL4_T4;
+echo "</a>\r\n ";
+echo "</div>\r\n";
+if ( $this->selectedTabIndex == 0 ) {
+?>
+<table id="overview" cellpadding="1" cellspacing="1">
+<thead>
+<tr><th colspan="5"><?php
+    echo LANGUI_VIL4_T1;
+?></th></tr>
+<?php
+    echo "<tr><td>" . LANGUI_VIL4_T6 . "</td><td>" . LANGUI_VIL4_T7 . "</td><td>" . LANGUI_VIL4_T8 . "</td><td>" . LANGUI_VIL4_T5 . "</td><td>" . LANGUI_VIL4_T9 . "</td></tr>";
+?>
+</thead>
+<tbody>
+<?php
+    $id  = $this->player->playerId;
+    $col = "
+SELECT a.b, c.d, e.f, g.h, v.offer_merchants_count, v.buildings, v.id, v.village_name FROM p_villages v
+	LEFT JOIN (SELECT to_village_id,COUNT(*) AS b FROM p_queue WHERE to_player_id = $id AND proc_type IN (13, 14) GROUP BY to_village_id) a ON (v.id = a.to_village_id)
+	LEFT JOIN (SELECT village_id,COUNT(*) AS d FROM p_queue WHERE player_id = $id AND proc_type = 2 GROUP BY village_id) c ON (v.id = c.village_id)
+	LEFT JOIN (SELECT village_id, GROUP_CONCAT(DISTINCT proc_params ORDER BY proc_params ASC) f FROM p_queue WHERE player_id = $id AND proc_type = 7 GROUP BY village_id) e ON (v.id = e.village_id)
+	LEFT JOIN (SELECT village_id, GROUP_CONCAT(proc_params) h FROM p_queue WHERE player_id = $id AND proc_type IN (10, 11) GROUP BY village_id) g ON (v.id = g.village_id)
+WHERE v.player_id = $id AND is_oasis = 0 ORDER BY v.village_name ASC";
+    $col = mysql_query( $col );
+    while ( $row = mysql_fetch_row( $col ) ) {
+        $row[ 0 ] = ( $row[ 0 ] == NULL ? '' : '<img src="assets/x.gif" class="att1" alt="Attacking troops coming" title="Attacking troops coming"> ' . $row[ 0 ] );
+        $temp     = "";
+        for ( $i = 0; $i < $row[ 1 ]; ++$i )
+            $temp .= '<img src="assets/x.gif" class="online5" alt="Building in progress" title="Building in progress"/> ';
+        $row[ 1 ] = $temp;
+        $temp     = explode( ",", $row[ 2 ] );
+        $row[ 2 ] = "";
+        for ( $i = 0; $i < sizeof( $temp ); ++$i )
+            if ( $temp[ $i ] != "" )
+                $row[ 2 ] .= '<img src="assets/x.gif" class="unit u' . $temp[ $i ] . '" alt="" title=""/>';
+        echo "<tr><td class=\"link\"><div><a href=\"village1.php?vid=$row[6]\">$row[7]</a></div></td>";
+        $temp = explode( ",", $row[ 5 ] );
+        $lvl  = 0;
+        for ( $i = 0; $i < sizeof( $temp ); ++$i ) {
+            if ( substr( $temp[ $i ], 0, 2 ) == "17" ) {
+                $temp = explode( " ", $temp[ $i ] );
+                $lvl  = $temp[ 1 ];
+                break;
+            }
+        }
+        $temp      = explode( ",", $row[ 3 ] );
+        $merch_out = 0;
+        for ( $i = 0; $i < sizeof( $temp ); ++$i ) {
+            $tempp = explode( "|", $temp[ $i ] );
+            $merch_out += intval( $tempp[ 0 ] );
+        }
+        $merch     = ( $lvl > 0 ? $merch = $this->gameMetadata[ 'items' ][ 17 ][ 'levels' ][ $lvl - 1 ][ 'value' ] : 0 );
+        $realmerch = $merch - $row[ 4 ] - $merch_out;
+        printf( "<td>%s</td><td>%s</td><td>%s</td><td><a href=\"build.php?vid=$row[6]&amp;bid=17\">%s</a></td>", $row[ 0 ], $row[ 1 ], $row[ 2 ], "$realmerch/$merch" );
+        echo "</tr>";
+    }
+?>
+</tbody></table>
+<?php
+}
+if ( $this->selectedTabIndex == 1 ) {
+?>
+<table id="ressources" cellpadding="1" cellspacing="1">
+<thead><tr><th colspan="6">Resources</th></tr>
+<tr>
+<td>Village</td><td><img class="r1" src="assets/x.gif" title="" alt=""></td><td><img class="r2" src="assets/x.gif" title="" alt=""></td><td><img class="r3" src="assets/x.gif" title="" alt=""></td><td><img class="r4" src="assets/x.gif" title="" alt=""></td><td>Merchants</td>
+</tr>
+
+</thead><tbody>
+<?php
+    $sum = Array(
+         0,
+        0,
+        0,
+        0,
+        0,
+        0 
+    );
+    $id  = $this->player->playerId;
+    $col = "
+SELECT v.resources, v.buildings, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(last_update_date), a.b, v.offer_merchants_count, v.crop_consumption, v.id, v.village_name FROM p_villages v
+	LEFT JOIN (SELECT village_id, GROUP_CONCAT(proc_params) b FROM p_queue WHERE player_id = $id AND proc_type IN (10, 11) GROUP BY village_id) a ON (v.id = a.village_id)
+WHERE v.player_id = $id AND is_oasis = 0 ORDER BY v.village_name ASC
+";
+    $col = mysql_query( $col );
+    while ( $row = mysql_fetch_row( $col ) ) {
+        $temp = explode( ",", $row[ 1 ] );
+        $lvl  = 0;
+        for ( $i = 0; $i < sizeof( $temp ); ++$i ) {
+            if ( substr( $temp[ $i ], 0, 2 ) == "17" ) {
+                $temp = explode( " ", $temp[ $i ] );
+                $lvl  = $temp[ 1 ];
+                break;
+            }
+        }
+        $temp      = explode( ",", $row[ 3 ] );
+        $merch_out = 0;
+        for ( $i = 0; $i < sizeof( $temp ); ++$i ) {
+            $tempp = explode( "|", $temp[ $i ] );
+            $merch_out += intval( $tempp[ 0 ] );
+        }
+        $merch     = ( $lvl > 0 ? $merch = $this->gameMetadata[ 'items' ][ 17 ][ 'levels' ][ $lvl - 1 ][ 'value' ] : 0 );
+        $realmerch = $merch - $row[ 4 ] - $merch_out;
+        $sum[ 4 ] += $realmerch;
+        $sum[ 5 ] += $merch;
+        $res  = explode( ",", $row[ 0 ] );
+        $proc = Array(
+             0,
+            0,
+            0,
+            0 
+        );
+        for ( $i = 0; $i < 4; ++$i ) {
+            $ress      = explode( " ", $res[ $i ] );
+            $res[ $i ] = min( round( $ress[ 1 ] + $row[ 2 ] * ( $ress[ 4 ] * ( 1 + $ress[ 5 ] / 100 ) - ( $i == 3 ? $row[ 5 ] : 0 ) ) / 3600 ), $ress[ 2 ] );
+            $sum[ $i ] += $res[ $i ];
+            $proc[ $i ] = round( $res[ $i ] * 100 / $ress[ 2 ] );
+        }
+        echo "<tr><td class=\"link\"><div><a href=\"village1.php?vid=$row[6]\">$row[7]</a></div></td>";
+        for ( $i = 0; $i < 4; ++$i )
+            printf( "<td%s>%s</td>", ( $proc[ $i ] >= 90 ? " style=\"color:red\"" : ( $proc[ $i ] < 25 ? " style=\"color:#71d000\"" : "" ) ), $res[ $i ] );
+        echo "<td class=\"link\"><a href=\"build.php?vid=$row[6]&amp;bid=17\">$realmerch/$merch</td></tr>";
+    }
+    echo '<tr><td colspan="6" class="empty"></td></tr><tr class="sum"><th>Sum</th>';
+    for ( $i = 0; $i < 4; ++$i )
+        printf( "<td>%s</td>", $sum[ $i ] );
+    printf( "<td>%s</td></tr></tbody></table>", $sum[ 4 ] . "/" . $sum[ 5 ] );
+}
+if ( $this->selectedTabIndex == 2 ) {
+?>
+<script type="text/ecmascript"><!--
+function toggle (x)
+{
+	var y = (x == 1 ? "Any" : "All");
+	var z = (x == 1 ? "All" : "Any");
+	var a = document.getElementsByClassName (y);
+	var b = document.getElementsByClassName (z);
+	for (var i = 0; i < a.length; ++i)
+	{
+		a[i].style.display = "none";
+		b[i].style.display = "";
+	}
+}
+--></script>
+<table id="warehouse" cellpadding="1" cellspacing="1">
+<thead><tr><th colspan="7">Warehouse</th></tr>
+<tr><td>Village</td>
+<td><img class="r1" src="assets/x.gif" title="Wood" alt="Wood"></td>
+<td><img class="r2" src="assets/x.gif" title="Clay" alt="Clay"></td>
+<td><img class="r3" src="assets/x.gif" title="Iron" alt="Iron"></td>
+<td style="font-size:70%"><img class="clock" src="assets/x.gif" title="Clock" alt="Clock"> <a href="#" onclick="toggle(0);" class="All" style="display:none">Any</a><a href="#" onclick="toggle(1);" class="Any">All</a></td>
+<td><img class="r4" src="assets/x.gif" title="Crop" alt="Crop"></td>
+<td><img class="clock" src="assets/x.gif" title="Clock" alt="Clock"></td>
+</tr></thead><tbody>
+<?php
+    $id  = $this->player->playerId;
+    $col = "
+SELECT v.resources, v.buildings, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(last_update_date), a.b, v.offer_merchants_count, v.crop_consumption, v.id, v.village_name FROM p_villages v
+	LEFT JOIN (SELECT village_id, GROUP_CONCAT(proc_params) b FROM p_queue WHERE player_id = $id AND proc_type IN (10, 11) GROUP BY village_id) a ON (v.id = a.village_id)
+WHERE v.player_id = $id AND v.is_oasis = 0 ORDER BY v.village_name ASC
+";
+    $col = mysql_query( $col );
+    $js  = "<script type=\"text/ecmascript\"><!--\nfunction update(){var prod=[[";
+    while ( $row = mysql_fetch_row( $col ) ) {
+        $res = explode( ",", $row[ 0 ] );
+        $rem = Array(
+             0,
+            0,
+            0,
+            0 
+        );
+        for ( $i = 0; $i < 4; ++$i ) {
+            $ress      = explode( " ", $res[ $i ] );
+            $prod      = ( $ress[ 4 ] * ( 1 + $ress[ 5 ] / 100 ) - ( $i == 3 ? $row[ 5 ] : 0 ) ) / 3600;
+            $res[ $i ] = $ress[ 1 ] + $row[ 2 ] * $prod;
+            $rem[ $i ] = max( round( ( $ress[ 2 ] - $res[ $i ] ) / $prod ), 0 );
+            $res[ $i ] = min( 100, round( $res[ $i ] * 100 / $ress[ 2 ] ) );
+        }
+        echo "<tr><td class=\"link\"><div><a href=\"village1.php?vid=$row[6]\">$row[7]</a></div></td>";
+        for ( $i = 0; $i < 3; ++$i )
+            printf( "<td%s>%s%%</td>", ( $res[ $i ] >= 90 ? " style=\"color:red\"" : ( $res[ $i ] < 25 ? " style=\"color:#71d000\"" : "" ) ), $res[ $i ] );
+        printf( "<td class=\"Any\">%s</td>", Webhelper::secondstostring( max( array_slice( $rem, 0, 3 ) ) ) );
+        printf( "<td class=\"All\" style=\"display:none\">%s</td>", Webhelper::secondstostring( min( array_slice( $rem, 0, 3 ) ) ) );
+        printf( "<td%s>%s%%</td>", ( $res[ $i ] >= 90 ? " style=\"color:red\"" : ( $res[ $i ] < 25 ? " style=\"color:#71d000\"" : "" ) ), $res[ $i ] );
+        printf( "<td>%s</td>", Webhelper::secondstostring( $rem[ 3 ] ) );
+        echo "</tr>";
+    }
+?>
+</tbody></table>
+<?php
+}
+if ( $this->selectedTabIndex == 3 ) {
+?>
+<table id="culture_points" cellpadding="1" cellspacing="1">
+<thead>
+<tr><th colspan="5">Culture points</th></tr>
+<tr><td>Village</td><td>CP/day</td><td>Celebrations</td><td>Troops</td><td>Slots</td></tr>
+</thead>
+<tbody>
+<?php
+    $id  = $this->player->playerId;
+    $col = "
+SELECT a.b, v.cp, v.troops_num, v.buildings, v.child_villages_id, v.id, v.village_name, a.thr FROM p_villages v
+	LEFT JOIN (SELECT proc_params b, village_id, SUM(threads) thr FROM p_queue WHERE player_id = $id AND proc_type = 9 GROUP BY village_id) a ON (v.id = a.village_id)
+WHERE v.player_id = $id AND v.is_oasis = 0 ORDER BY v.village_name ASC
+";
+    $col = mysql_query( $col );
+    $sum = Array(
+         0,
+        0,
+        0,
+        0,
+        0,
+        0 
+    );
+    while ( $row = mysql_fetch_row( $col ) ) {
+        $cp = explode( " ", $row[ 1 ] );
+        $sum[ 0 ] += $cp[ 1 ];
+        $exp  = explode( "|", $row[ 2 ] );
+        $exp  = explode( ":", $exp[ 0 ] );
+        $exp  = explode( ",", $exp[ 1 ] );
+        $expp = explode( " ", $exp[ 8 ] );
+        $sum[ 2 ] += $expp[ 1 ];
+        $imgs = "";
+        for ( $i = 0; $i < $expp[ 1 ]; ++$i )
+            $imgs += '<img src="assets/x.gif" class="unit u' . $expp[ 0 ] . '" alt="" title=""/>';
+        $expp = explode( " ", $exp[ 9 ] );
+        $sum[ 3 ] += $expp[ 1 ];
+        for ( $i = 0; $i < $expp[ 1 ]; ++$i )
+            $imgs += '<img src="assets/x.gif" class="unit u' . $expp[ 0 ] . '" alt="" title=""/>';
+        $exp   = explode( ",", $row[ 3 ] );
+        $slots = Array(
+             0,
+            0 
+        );
+        for ( $i = 18; $i < 38; ++$i ) {
+            $expp = explode( " ", $exp[ $i ] );
+            if ( $expp[ 0 ] == "25" ) {
+                if ( $expp[ 1 ] >= 10 )
+                    $slots[ 0 ] += 1;
+                if ( $expp[ 1 ] >= 20 )
+                    $slots[ 0 ] += 1;
+            } else if ( $expp[ 0 ] == "26" ) {
+                if ( $expp[ 1 ] >= 10 )
+                    $slots[ 0 ] += 1;
+                if ( $expp[ 1 ] >= 15 )
+                    $slots[ 0 ] += 1;
+                if ( $expp[ 1 ] >= 20 )
+                    $slots[ 0 ] += 1;
+            }
+        }
+        $slots[ 1 ] = sizeof( explode( ",", $row[ 4 ] ) );
+        $sum[ 4 ] += $slots[ 0 ];
+        $sum[ 5 ] += $slots[ 1 ];
+        printf( '<tr><td><a href="village1.php?vid=%s">%s</a></td><td>%s</td><td>%s</td><td>%s</td><td>%s/%s</td></tr>', $row[ 5 ], $row[ 6 ], $cp[ 1 ], ( $row[ 0 ] == 1 ? "Small" : ( $row[ 0 ] == 2 ? "Large" : "" ) ), $imgs, $slots[ 1 ], $slots[ 0 ] );
+    }
+    echo '</tbody></table>';
+}
+/*if ( $this->selectedTabIndex == 4 ) {
+?>
+<table id="troops" cellpadding="1" cellspacing="1">
+<thead><tr><th colspan="12">Own troops</th></tr><tr>
+<td>Village</td>
+<?php
+?>
+</tr></thead><tbody>
+<?php
+?>
+
+<tr>
+<th>Sum</th>
+<?php
+?>
+</tr></tbody></table>
+<?php
+} */
+} else {
+echo '<h1> Attenzione! </h1> <br /> Devi avere un account Plus per poter usare questa funzionalità ';
+}
+?>
