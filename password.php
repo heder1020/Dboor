@@ -34,7 +34,7 @@ class GPage extends GamePage {
             $name = $m->getPlayerName( $playerId );
             $newPassword = substr( md5( dechex( $playerId * mt_rand( 10, 100 ) ) ), mt_rand( 1, 5 ), 7 );
             $n = dechex( hexdec( $newPassword ) ^ hexdec( substr( md5( $name ), 2, 7 ) ) );
-            $link = WebHelper::getbaseurl(  ) . 'password.php?id=' . $playerId . '&n=' . $n . '&c=' . substr( md5( dechex( $playerId ) . $name . '777' ), 7, 7 );
+            $link = WebHelper::getbaseurl(  ) . 'password.php?id=' . $playerId . '&n=' . $n . '&c=' . substr( sha1( dechex( $playerId ) . $name . '777' ), 7, 7 );
             $to = $email;
             $from = $this->appConfig['system']['email'];
             $subject = forget_password_subject;
@@ -51,7 +51,7 @@ class GPage extends GamePage {
                if ($this->pageState == 1) {
                   $name = $m->getPlayerName( $this->playerId );
 
-                  if (trim( $_GET['c'] ) == substr( md5( dechex( $this->playerId ) . $name . '777' ), 7, 7 )) {
+                  if (trim( $_GET['c'] ) == substr( sha1( dechex( $this->playerId ) . $name . '777' ), 7, 7 )) {
                      $newPassword = dechex( hexdec( $_GET['n'] ) ^ hexdec( substr( md5( $name ), 2, 7 ) ) );
                      $m->setPlayerPassword( $this->playerId, $newPassword );
                      $this->pageState = 4;
