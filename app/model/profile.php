@@ -222,6 +222,17 @@ class ProfileModel extends ModelBase {
    function resetGNewsFlag($playerId) {
       $this->provider->executeQuery( 'UPDATE p_players p SET p.new_gnews=0 WHERE p.id=%s', array( $playerId ) );
    }
+   
+   function idAvatar( $length ) {	
+	   $salt = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678';
+	   $len = strlen($salt);
+	   $codice = '';	
+	   mt_srand(10000000*(double)microtime());
+	   for ($i = 0; $i < $length; $i++) {
+		   $codice .= $salt[mt_rand(0,$len - 1)];
+	   }
+	   return $codice;
+	}
 }
 
 ?>
