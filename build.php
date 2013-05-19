@@ -229,7 +229,7 @@
 				
 				case 27: {
                 	$this->productionPane = FALSE;
-					$this->buildingView   = 'Treasury';
+					$this->buildingView   = 'Tresury';
 					break;
 				}
 

@@ -1,0 +1,69 @@
+ 
+<br />
+<div class="gid27"> 
+<body> 
+    <table id="own" cellpadding="1" cellspacing="1"> 
+        <thead> 
+            <tr> 
+                <th colspan="4">Own artefacts</th> 
+            </tr> 
+            <tr> 
+                <td></td> 
+                <td>Name</td> 
+                <td>Village</td> 
+                <td>Alliance</td> 
+            </tr> 
+        </thead> 
+
+        <tbody>
+        <?PHP
+        $query = mysql_query("SELECT *,p_villages.village_name FROM v_artefacts LEFT JOIN p_villages ON ( p_villages.id = v_artefacts.vref ) WHERE v_artefacts.owner=".$this->player->playerId."");
+        if(mysql_num_rows($query) > 0)
+        {        
+            while($result = mysql_fetch_assoc($query))
+            {
+                $alliance = $this->data['alliance_name'] == '' ? 'none' : $this->data['alliance_name'] ;
+                echo '<tr>';
+                echo '<td></td>';
+                echo '<td>'.$result['name'].'</td>';
+                echo '<td>'.$result['village_name'].'</td>';
+                echo '<td>'.$alliance.'</td>';
+                echo '</tr>';
+            }
+        }
+        else
+        {
+            echo ' <tr><td colspan="4" class="none">you dont have any artefact1</td></tr>';
+        }
+        ?> 
+           
+        </tbody> 
+    </table> 
+
+    <table id="near" cellpadding="1" cellspacing="1"> 
+        <thead> 
+            <tr> 
+                <th colspan="4">Artefacts in this server</th> 
+            </tr> 
+
+            <tr> 
+                <td></td> 
+
+                <td>Name</td> 
+
+                <td>player</td> 
+
+                <td>distance</td> 
+            </tr> 
+        </thead> 
+
+        <tbody> 
+        
+		 <td colspan="4" class="none">you dont have any artefact</td> 
+
+		 
+		
+        </tbody> 
+    </table> 
+</div> 
+
