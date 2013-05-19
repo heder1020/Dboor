@@ -226,6 +226,12 @@
 					$this->handleResidencePalace(  );
 					break;
 				}
+				
+				case 27: {
+                	$this->productionPane = FALSE;
+					$this->buildingView   = 'Treasury';
+					break;
+				}
 
 				case 37: {
 					$this->productionPane = FALSE;
