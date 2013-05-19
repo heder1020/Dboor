@@ -158,7 +158,7 @@ class GPage extends VillagePage
                                 foreach ( $this->troops as $troop ) {
                                     $num = 0;
                                     if ( isset( $_POST[ 't' ][ $troop[ 'troopId' ] ] ) && 0 < intval( $_POST[ 't' ][ $troop[ 'troopId' ] ] ) ) {
-                                        $num = $troop[ 'number' ] < $_POST[ 't' ][ $troop[ 'troopId' ] ] ? $troop[ 'number' ] : intval( $_POST[ 't' ][ $troop[ 'troopId' ] ] );
+                                        $num = $troop[ 'number' ] < intval($_POST[ 't' ][ $troop[ 'troopId' ] ]) ? $troop[ 'number' ] : intval( $_POST[ 't' ][ $troop[ 'troopId' ] ] );
                                     }
                                     $renderTroops[ $troop[ 'troopId' ] ] = $num;
                                     $totalTroopsCount += $num;
