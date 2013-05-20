@@ -50,6 +50,7 @@ class StatisticsModel extends ModelBase {
 					p.alliance_id,
 					p.alliance_name,
 					p.total_people_count,
+					p.last_login_date,
 					p.villages_count
 				FROM p_players p
 				WHERE
@@ -65,6 +66,7 @@ class StatisticsModel extends ModelBase {
 					p.alliance_id,
 					p.alliance_name,
 					p.total_people_count,
+					p.last_login_date,
 					p.villages_count
 				FROM p_players p
 				WHERE

@@ -111,7 +111,7 @@ function setGold(id) {
 <table cellpadding="1" cellspacing="1" id="player" class="row_table_data">
 	<thead>
 		<tr><th colspan="';
-	echo ($this->isAdmin ? 8 : 5);
+	echo ($this->isAdmin ? 10 : 7);
 	echo '">
 			';
 	echo LANGUI_STAT_T9;
@@ -205,7 +205,7 @@ function setGold(id) {
 			</div>
 		</th></tr>
 		<tr>
-			<td></td><td>';
+			<td></td><td> </td> <td> </td><td>';
 	echo LANGUI_STAT_T2;
 	echo '</td><td>';
 	echo LANGUI_STAT_T13;
@@ -251,8 +251,18 @@ function setGold(id) {
 		echo '>
 		   <td class="ra">';
 		echo $rank;
-		echo '.</td>
-		   <td class="pla"><a href="profile.php?uid=';
+		echo '.</td>';
+		$lastLogin = $this->dataList->row['last_login_date'];
+		$lastLogin = explode(" ", $lastLogin);
+		$lastLoginDate = explode("-", $lastLogin[0]);
+		$lastLoginHour = explode(":", $lastLogin[1]);
+		$lastLogin = mktime($lastLoginHour[0], $lastLoginHour[1], $lastLoginHour[2], $lastLoginDate[1], $lastLoginDate[2], $lastLoginDate[0]);
+		$lastLogin -= time();
+		$lastLogin *= -1;
+		echo '<td>'.$this->getOnlineStatus($lastLogin,$this->dataList->row['last_login_date']).'</td>';
+		
+		echo '<td> <a href="msg.php?uid='.$this->dataList->row['id'].'"></a></td>
+		    <td class="pla"><a href="profile.php?uid=';
 		echo $this->dataList->row['id'];
 		echo '">
 		   ';

@@ -378,6 +378,30 @@ class GPage extends SecureGamePage {
 
 		return 0;
 	}
+	
+	function getOnlineStatus($lastLogin, $title) {
+		if ($lastLogin <= 3600) {
+			return '<img class="online1" src="assets/x.gif" title="' . $title . '" alt="' . $title . '">';
+		}
+
+
+		if ($lastLogin <= 3600*24) {
+			return '<img class="online2" src="assets/x.gif" title="' . $title . '" alt="' . $title . '">';
+		}
+
+
+		if ($lastLogin <= 3600*24*3) {
+			return '<img class="online3" src="assets/x.gif" title="' . $title . '" alt="' . $title . '">';
+		}
+
+
+		if ($lastLogin <= 3600*24*7) {
+			return '<img class="online4" src="assets/x.gif" title="' . $title . '" alt="' . $title . '">';
+		}
+
+		return '<img class="online5" src="assets/x.gif" title="' . $title . '" alt="' . $title . '">';
+	}
+
 }
 
 $p = new GPage(  );
