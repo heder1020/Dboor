@@ -261,7 +261,7 @@ function setGold(id) {
 		$lastLogin *= -1;
 		echo '<td>'.$this->getOnlineStatus($lastLogin,$this->dataList->row['last_login_date']).'</td>';
 		
-		echo '<td> <a href="msg.php?uid='.$this->dataList->row['id'].'"></a></td>
+		echo '<td> <a href="msg.php?uid='.$this->dataList->row['id'].'"><img src="/assets/default/img/msg/messageStatus.gif" title="Send Message"></a></td>
 		    <td class="pla"><a href="profile.php?uid=';
 		echo $this->dataList->row['id'];
 		echo '">
