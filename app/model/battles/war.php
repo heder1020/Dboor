@@ -38,6 +38,8 @@ class WarBattleModel extends BattleModel
             ) );
             return TRUE;
         }
+		$mq = new QueueJobModel ();
+		$mq->cropBalance ($toVillageRow['player_id'], $toVillageRow['id']);
         $heroLevel = array(
              'att' => 0,
             'deff' => 0,
