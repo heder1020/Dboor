@@ -198,7 +198,7 @@ class GPage extends VillagePage
                         $num = 0;
                         if ( ( isset( $_POST['t'][$troop['troopId']] ) AND 0 < intval( $_POST['t'][$troop['troopId']] ) ) ) {
                             if ( preg_match( '/^[+-]?[0-9]+$/', $_POST['t'][$troop['troopId']] ) == 0 ) {
-                                exit;
+                                $this->redirect( 'build.php?id=39' );
                             }
                             $num = ( $troop['number'] < $_POST['t'][$troop['troopId']] ? $troop['number'] : intval( $_POST['t'][$troop['troopId']] ) );
                         }
