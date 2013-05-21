@@ -203,6 +203,10 @@ class SecureGamePage extends GamePage
         $this->wrap = ( strlen( $wrapString ) > 40 );
         list( $this->cpValue, $this->cpRate ) = explode( ' ', $this->data[ 'cp' ] );
         $this->cpValue += $elapsedTimeInSeconds * ( $this->cpRate / 86400 );
+		if ($this->resources[4]['current_value'] < 0) {
+			$qj = new QueueJobModel ();
+			$qj->cropBalance ($this->player->playerId, $this->data['selected_village_id']);
+		}
     }
     function preRender( )
     {
