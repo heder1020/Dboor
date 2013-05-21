@@ -163,8 +163,8 @@ class GPage extends SecureGamePage {
 
 				case 4: {
 						if (( ( ( ( ( isset( $_POST['del'] ) && $_POST['del'] == 1 ) && strtolower( $this->profileData['pwd'] ) == strtolower( md5( $_POST['del_pw'] ) ) ) && !$this->isPlayerInDeletionProgress(  ) ) && !$this->isGameTransientStopped(  ) ) && !$this->isGameOver(  ) )) {
-							QueueTask;
-							( new $this->queueModel->addTask( QS_ACCOUNT_DELETE, $this->player->playerId, 259200 ) );
+							
+							$this->queueModel->addTask( new QueueTask( QS_ACCOUNT_DELETE, $this->player->playerId, 259200 ) );
 						}
 					}
 				}
