@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 require_once( MODEL_PATH . 'badwords.php' );
 require_once( MODEL_PATH . 'wordsfilter.php' );

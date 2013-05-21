@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 require( MODEL_PATH . 'global.php' );
 require( MODEL_PATH . 'queue.php' );
 require( MODEL_PATH . 'queuejob.php' );

@@ -9,6 +9,9 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
 class QueueTask {
 	var $playerId = null;
 	var $villageId = null;

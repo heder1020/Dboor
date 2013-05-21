@@ -9,7 +9,7 @@
 *
 **/
 
-
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 require_once( MODEL_PATH . 'battle.php' );
 require_once( MODEL_PATH . DIRECTORY_SEPARATOR . 'battles' . DIRECTORY_SEPARATOR . 'war.php' );

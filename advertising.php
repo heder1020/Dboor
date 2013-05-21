@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 require_once( MODEL_PATH . 'advertising.php' );
 class GPage extends SecureGamePage {

@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 	require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 	require_once( MODEL_PATH . 'resources.php' );
 	class GPage extends SecureGamePage {
@@ -48,8 +49,7 @@
 				return null;
 			}
 
-			ResourcesModel;
-			$m = new (  );
+			$m = new ResourcesModel(  );
 
 			if ($this->isPost(  )) {
 				$r1 = (( isset( $_POST['r1'] ) && 0 <= intval( $_POST['r1'] ) ) ? intval( $_POST['r1'] ) : 0 - 1);

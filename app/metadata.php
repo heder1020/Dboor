@@ -1,5 +1,9 @@
 <?php
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 require_once("config.php");
 
 $speed=($AppConfig['Game']['speed']);

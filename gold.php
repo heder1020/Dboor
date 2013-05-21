@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 require_once( 'app/config.php' );
 
 if (!( $link = mysql_connect( $AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'] ))) {

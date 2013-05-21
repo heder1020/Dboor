@@ -8,6 +8,8 @@
 * @   Project     :   DBOOR Full Decoded
 *
 **/
+
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 class GPage extends PopupPage {
 	var $requestPaymentProvider = FALSE;

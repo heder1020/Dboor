@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 require_once( MODEL_PATH . 'profile.php' );
 class GPage extends GamePage {
@@ -28,8 +29,7 @@ class GPage extends GamePage {
 			return null;
 		}
 
-		ProfileModel;
-		$m = new (  );
+		$m = new ProfileModel(  );
 		$this->playerData = $m->getWinnerPlayer(  );
 		$m->dispose(  );
 	}

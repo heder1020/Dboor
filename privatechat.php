@@ -9,6 +9,7 @@
 *
 **/
 
+define( 'INSIDE', true );
 require( '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php' );
 require_once( MODEL_PATH . 'privatechat.php' );
 require_once( MODEL_PATH . 'wordsfilter.php' );
@@ -31,8 +32,7 @@ class GPage extends SecureGamePage {
 
 	function load() {
 		parent::load(  );
-		FilterWordsModel;
-		$this->Filter = new (  );
+		$this->Filter = new FilterWordsModel(  );
 
 		if (( isset( $_GET['action'] ) && $_GET['action'] == 'chatheartbeat' )) {
 			$this->chatHeartbeat(  );
@@ -66,8 +66,7 @@ class GPage extends SecureGamePage {
 	}
 
 	function chatHeartbeat() {
-		PrivateChatModel;
-		$m = new (  );
+		$m = new PrivateChatModel(  );
 		$chat = $m->GetFromChat( $this->player->playerId );
 		$items = '';
 		$chatBoxes = array(  );
@@ -219,8 +218,7 @@ class GPage extends SecureGamePage {
 				"m": "' . $messagesan . '"
 		   },';
 		unset( $_SESSION['tsChatBoxes'][$to] );
-		PrivateChatModel;
-		$m = new (  );
+		$m = new PrivateChatModel(  );
 		$m->SendToChat( $from, $this->player->playerId, $this->data['avatar'], $to, $_POST['to_id'], $message );
 		$m->dispose(  );
 		echo '1';

@@ -1,4 +1,8 @@
 <?php
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 error_reporting(E_ALL);
 date_default_timezone_set('Europe/Rome');
 

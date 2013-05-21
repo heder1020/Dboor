@@ -9,6 +9,9 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
 define( "ROOT_PATH", realpath( dirname( dirname( __FILE__ ) ) ).DIRECTORY_SEPARATOR ); 
 define( "APP_PATH", ROOT_PATH."app".DIRECTORY_SEPARATOR ); 
 define( "LIB_PATH", ROOT_PATH."lib".DIRECTORY_SEPARATOR ); 
