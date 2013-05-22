@@ -13,7 +13,7 @@ require_once( LANG_UI_PATH . 'village2.php' );
 echo '<h1>';
 echo $this->data['village_name'];
 echo '</h1>
-
+<br />
 <map name="map1" id="map1">
 	<area href="build.php?id=40" ';
 echo $this->getBuildingTitle( 40 );
@@ -265,7 +265,7 @@ echo '" onclick="toggleLevels()" alt="">
 ';
 
 if (isset( $this->queueModel->tasksInQueue[QS_BUILD_CREATEUPGRADE] )) {
-	echo '<table cellpadding="1" cellspacing="1" id="building_contract">
+	echo '<br /><br /><table cellpadding="1" cellspacing="1" id="building_contract">
 	<thead>
 		<tr><th colspan="3">
 			';
