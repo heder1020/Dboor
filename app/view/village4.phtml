@@ -10,7 +10,6 @@
 **/
  
 require_once( LANG_UI_PATH . "village4.php" );
-if($this->accountPlus( 0 ) > 0){
 echo "<h1>";
 echo LANGUI_VIL4_T1;
 echo "</h1>\r\n\r\n<div id=\"textmenu\">\r\n <a href=\"village4.php\"";
@@ -313,7 +312,5 @@ WHERE v.player_id = $id AND v.is_oasis = 0 ORDER BY v.village_name ASC
 </tr></tbody></table>
 <?php
 } */
-} else {
-echo '<h1> Attenzione! </h1> <br /> Devi avere un account Plus per poter usare questa funzionalità ';
-}
+
 ?>

@@ -26,7 +26,19 @@ class GPage extends securegamepage
     {
         parent::load();
         $this->selectedTabIndex = isset( $_GET[ 't' ] ) && is_numeric( $_GET[ 't' ] ) && 0 <= intval( $_GET[ 't' ] ) && intval( $_GET[ 't' ] ) <= 5 ? intval( $_GET[ 't' ] ) : 0;
+		
+		$time = 0;
+		$tasks = $this->queueModel->tasksInQueue;
+
+		if (isset( $tasks[constant( 'QS_PLUS' . ( 1 ) )] )) {
+			$time = $tasks[constant( 'QS_PLUS' . ( 1 ) )][0]['remainingSeconds'];
+		}
+
+		if ( $time == 0 ){
+			header("location: plus.php");
+		}
     }
+	
     public function preRender( )
     {
         parent::prerender();
@@ -34,16 +46,7 @@ class GPage extends securegamepage
             $this->villagesLinkPostfix .= "&t=" . $this->selectedTabIndex;
         }
     }
-	public function accountPlus($action) {
-		$time = 0;
-		$tasks = $this->queueModel->tasksInQueue;
 
-		if (isset( $tasks[constant( 'QS_PLUS' . ( $action + 1 ) )] )) {
-			$time = $tasks[constant( 'QS_PLUS' . ( $action + 1 ) )][0]['remainingSeconds'];
-		}
-
-		return $time;
-	}
 }
 $p = new GPage();
 $p->run();
