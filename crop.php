@@ -23,6 +23,8 @@ class GPage extends SecureGamePage {
 
 	function load() {
 		parent::load(  );
+		$this->selectedTabIndex = (( ( ( isset( $_GET['t'] ) && is_numeric( $_GET['t'] ) ) && 0 <= intval( $_GET['t'] ) ) && intval( 		
+										 $_GET['t'] ) <= 2 ) ? intval( $_GET['t'] ) : 0);
 		$time = 0;
 		$tasks = $this->queueModel->tasksInQueue;
 

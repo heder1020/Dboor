@@ -1,0 +1,99 @@
+<?php
+
+/**
+*
+* @   Script Name :   crop.phtml
+* @   Author      :   NIKO28
+* @   Skype       :   nicolo3767
+* @   Project     :   DBOOR Full Decoded
+*
+**/
+
+$canarini = mysql_query("SELECT * FROM p_villages WHERE field_maps_id=1" );
+$pulcini= mysql_query("SELECT * FROM p_villages WHERE field_maps_id=6" ); 
+
+if( $this->selectedTabIndex == 0 ){
+?>
+
+<table class="plusFunctions" cellpadding="1" cellspacing="1">
+<thead>
+<tr><th colspan="2"> Crop Finder </th></tr>
+</thead>
+<tr>
+<td>
+	<img src="/assets/default/img/g/f1.jpg" width="240" height="211"/><br />
+    <a href="crop.php?t=1">
+    <input type="submit" name="submit" value="Find 9 Crop">
+    </a>
+</td>
+<td>
+	<img src="/assets/default/img/g/f6.jpg" width="240" height="211"/><br />
+     <a href="crop.php?t=2">
+     <input type="submit" name="submit" value="Find 15 Crop">
+     </a>
+</td>
+</tr>
+</table>
+<?php
+} elseif ($this->selectedTabIndex == 1) {
+?>
+<table class="plusFunctions" cellpadding="1" cellspacing="1">
+<thead>	
+		<tr><th colspan="4"><font face="tahoma"> 9 Crop Searching </font></th></tr>
+		<tr>
+		<td>Distance</td>
+		<td>Coordinate X</td>
+		<td>Coordinate Y</td>
+		<td>Village</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	$r = 0;
+	while($row = mysql_fetch_array($canarini)){ 
+	?>
+		<tr>
+		<td><center><?php echo $r;?></center></td>
+		<td><center><?php echo $row['rel_x']; ?></center></td>
+		<td><center><?php echo $row['rel_y']; ?></center></td>
+		<td><center><a href="village3.php?id=<?php echo $row['id']; ?>" >Village</center></a></td>
+		</tr>
+	<?php
+	$r++;
+	}
+	?>
+	</tbody>
+</table>
+<?php 
+} elseif ($this->selectedTabIndex == 2) {
+?>
+<table class="plusFunctions" cellpadding="1" cellspacing="1">
+<thead>	
+		<tr><th colspan="4"><font face="tahoma"> 9 Crop Searching </font></th></tr>
+		<tr>
+		<td>Distance</td>
+		<td>Coordinate X</td>
+		<td>Coordinate Y</td>
+		<td>Village</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	$r = 0;
+	while($row = mysql_fetch_array($pulcini)){ 
+	?>
+		<tr>
+		<td><center><?php echo $r;?></center></td>
+		<td><center><?php echo $row['rel_x']; ?></center></td>
+		<td><center><?php echo $row['rel_y']; ?></center></td>
+		<td><center><a href="village3.php?id=<?php echo $row['id']; ?>" >Village</center></a></td>
+		</tr>
+	<?php
+	$r++;
+	}
+	?>
+	</tbody>
+</table>
+<?php 
+}
+?>
