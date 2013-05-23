@@ -404,6 +404,7 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
+		/*
         $_hasTresury                   = false;
         $_hasOwnTresury                = true;
         $taskRow['proc_stealartefact'] = 0;
@@ -457,6 +458,7 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
+		*/
         $doTroopsBack    = TRUE;
         $villageCaptured = FALSE;
         $captureResult   = '';
