@@ -44,8 +44,7 @@ DROP TABLE IF EXISTS `g_comment`;
 DROP TABLE IF EXISTS `g_profile`;
 DROP TABLE IF EXISTS `p_friends`;
 DROP TABLE IF EXISTS `privatechat`;
-DROP TABLE IF EXISTS `v_artefacts`; 
-DROP TABLE IF EXISTS `p_artefacts`;
+DROP TABLE IF EXISTS `p_artefacts`; 
 
 CREATE TABLE `privatechat` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -327,7 +326,7 @@ CREATE TABLE `p_msgs` (
   KEY `NewIndex2` (`to_player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `v_artefacts` (
+CREATE TABLE `p_artefacts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vref` int(11) unsigned NOT NULL,
   `owner` int(11) unsigned NOT NULL,
@@ -345,24 +344,6 @@ CREATE TABLE `v_artefacts` (
   `lastupdate` int(11) unsigned NOT NULL,  
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-CREATE TABLE `p_artefacts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `vref` int(10) unsigned NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
-  `type` int(3) unsigned NOT NULL,
-  `size` int(10) unsigned NOT NULL,
-  `conquered` int(10) unsigned NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `desc` text NOT NULL,
-  `effect` varchar(45) NOT NULL,
-  `img` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `vref` (`vref`),
-  KEY `owner` (`owner`),
-  KEY `type` (`type`),
-  KEY `conquered` (`conquered`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `p_merchants` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -544,46 +525,7 @@ OPTIMIZE TABLE `g_banner`, `g_chat`, `g_settings`, `g_summary`, `g_words`, `priv
         }
         $this->provider->executeQuery( "UPDATE `p_villages` SET `resources` = '1 2001 2000 2000 1000 0,2 2000 2000 2000 1000 0,3 2000 2000 2000 1000 0,4 2000 2000 2000 1000 0' WHERE `p_villages`.`is_oasis` = 1" );
     }
-    public function _createArtifactsandtatarvillages( )
-    {
-        require_once( MODEL_PATH . "register.php" );
-        $map_size = $GLOBALS[ 'SetupMetadata' ][ 'map_size' ];
-        $m        = new RegisterModel();
-        $result   = $m->createNewPlayer( tatar_tribe_player, "", "", 5, 0, tatar_tribe_villages, $map_size, PLAYERTYPE_TATAR, 13 );
-        if ( $result[ 'hasErrors' ] ) {
-            return;
-        }
-        $this->provider->executeQuery( "UPDATE p_players p SET p.total_people_count=15045, p.description1='%s', p.guide_quiz='-1' WHERE id=%s", array(
-             tatar_tribe_desc,
-            intval( $result[ 'playerId' ] ) 
-        ) );
-        $troop_ids = array( );
-        foreach ( $GLOBALS[ 'GameMetadata' ][ 'troops' ] as $k => $v ) {
-            if ( $v[ 'for_tribe_id' ] == 5 ) {
-                $troop_ids[ ] = $k;
-            }
-        }
-        $firstFlag = TRUE;
-        foreach ( $result[ 'villages' ] as $createdVillage => $v ) {
-            $troops_num = "";
-            foreach ( $troop_ids as $tid ) {
-                if ( $troops_num != "" ) {
-                    $troops_num .= ",";
-                }
-                $num = $tid == 49 || $tid == 50 ? 0 : mt_rand( 42300, 117600 );
-                $troops_num .= sprintf( "%s %s", $tid, $num );
-            }
-            $troops_num = "-1:" . $troops_num;
-            $this->provider->executeQuery( "UPDATE p_villages v SET v.troops_num='%s', v.is_capital=%s, v.people_count=%s WHERE v.id=%s", array(
-                 $troops_num,
-                $firstFlag ? "1" : "0",
-                $firstFlag ? "864" : "163",
-                intval( $createdVillage ) 
-            ) );
-            $firstFlag = FALSE;
-        }
-        $m->dispose();
-    }
+    
     function _createAdminPlayer( $map_size, $adminEmail )
     {
         $m         = new RegisterModel();
