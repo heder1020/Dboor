@@ -257,6 +257,7 @@ CREATE TABLE `p_villages` (
   `player_name` varchar(300) DEFAULT NULL,
   `village_name` varchar(255) DEFAULT NULL,
   `alliance_name` varchar(300) DEFAULT NULL,
+  `artifact_id` int(11) DEFAULT NULL,
   `is_capital` tinyint(1) DEFAULT \'0\',
   `is_special_village` tinyint(1) DEFAULT \'0\',
   `is_oasis` tinyint(1) DEFAULT NULL,

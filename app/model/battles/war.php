@@ -1,13 +1,13 @@
 <?php
 
 /**
--*
--* @   Script Name :   war.php
--* @   Author      :   NIKO28
--* @   Skype       :   nicolo3767
--* @   Project     :   DBOOR Full Decoded
--*
--**/
+*
+* @   Script Name :   war.php
+* @   Author      :   NIKO28
+* @   Skype       :   nicolo3767
+* @   Project     :   DBOOR Full Decoded
+*
+**/
 
 class WarBattleModel extends BattleModel
 {
@@ -38,25 +38,11 @@ class WarBattleModel extends BattleModel
             ) );
             return TRUE;
         }
-		$mq = new QueueJobModel ();
-		$mq->cropBalance ($toVillageRow['player_id'], $toVillageRow['id']);
-        $heroLevel = array(
-             'att' => 0,
-            'deff' => 0,
-            'heroTroopId' => -1 
-        );
-        if ( $procInfo['troopsArray']['hasHero'] ) {
-            $_row = $this->provider->fetchRow( 'SELECT p.hero_att, p.hero_deff, p.hero_troop_id FROM p_players p WHERE p.id=%s', array(
-                 intval( $fromVillageRow['player_id'] ) 
-            ) );
-            if ( $_row != NULL ) {
-                $heroLevel['att']         = intval( $_row['hero_att'] );
-                $heroLevel['deff']        = intval( $_row['hero_deff'] );
-                $heroLevel['heroTroopId'] = intval( $_row['hero_troop_id'] );
-            }
-        }
-        $heroBuildingLevel = 0;
-        $wringerLevel      = 0;
+		
+		// Informazioni sulle strutture dell'attaccante
+		$wringerLevel      = 0; // Birreria
+        $heroBuildingLevel = 0; // Dimora dell'eroe
+		$TreasuryLevel	   = 0; // Camera del tesoro
         $buildings         = array( );
         $bStr              = trim( $fromVillageRow['buildings'] );
         if ( $bStr != '' ) {
@@ -72,8 +58,9 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
-        $attackTroops           = $this->_getAttackTroopsForVillage( $fromVillageRow['troops_training'], $procInfo['troopsArray']['troops'], $heroLevel, $wringerLevel, FALSE );
-        $buildinStabilityFactor = 1;
+		
+		// Strutture del difensore
+		$buildinStabilityFactor = 1;
         $crannyTotalSize        = 0;
         $palLevel               = 0;
         $wallPower              = 0;
@@ -102,13 +89,28 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
-        $crannyTotalSize                     = floor( $crannyTotalSize * $GameMetadata['tribes'][$fromVillageRow['tribe_id']]['crannyFactor'] );
-        $buildinStability                    = 1;
-        $crannySize                          = 0;
-        $crannyTotalSize                     = floor( $crannyTotalSize * $GameMetadata['tribes'][$fromVillageRow['tribe_id']]['crannyFactor'] );
-        $defenseTroops                       = array( );
-        $totalDefensePower['infantry_power'] = $totalDefensePower['cavalry_power'] = 0;
-        $troops_num                          = trim( $toVillageRow['troops_num'] );
+        $crannyTotalSize = floor( $crannyTotalSize * $GameMetadata['tribes'][$fromVillageRow['tribe_id']]['crannyFactor'] );
+		
+		// Truppe Attaccante
+        $heroLevel = array( 'att' => 0, 'deff' => 0, 'heroTroopId' => -1 );
+        if ( $procInfo['troopsArray']['hasHero'] ) {
+            $_row = $this->provider->fetchRow( 'SELECT p.hero_att, p.hero_deff, p.hero_troop_id FROM p_players p WHERE p.id=%s', 
+												array( intval( $fromVillageRow['player_id'] ) ) );
+            if ( $_row != NULL ) {
+                $heroLevel['att']         = intval( $_row['hero_att'] );
+                $heroLevel['deff']        = intval( $_row['hero_deff'] );
+                $heroLevel['heroTroopId'] = intval( $_row['hero_troop_id'] );
+            }
+        }
+        $attackTroops = $this->_getAttackTroopsForVillage( $fromVillageRow['troops_training'], $procInfo['troopsArray']['troops'], 
+														   $heroLevel, $wringerLevel, FALSE );
+        // Truppe Difensore
+		$mq = new QueueJobModel ();
+		$mq->cropBalance ($toVillageRow['player_id'], $toVillageRow['id']); // Uccide le truppe nel villo del se non c'è grano
+        $defenseTroops = array( );
+        $totalDefensePower['infantry_power'] = 0;
+		$totalDefensePower['cavalry_power'] = 0;
+        $troops_num = trim( $toVillageRow['troops_num'] );
         if ( $troops_num != '' ) {
             $vtroopsArr = explode( '|', $troops_num );
             foreach ( $vtroopsArr as $vtroopsStr ) {
@@ -125,29 +127,35 @@ class WarBattleModel extends BattleModel
                         $vtroops[$_tid] = $_tnum + $incFactor;
                     }
                 }
-                if ( $tvid == -1 ) {
+              /*if ( $tvid == -1 ) {
                     $hero_in_village_id = intval( $this->provider->fetchScalar( 'SELECT p.hero_in_village_id FROM p_players p WHERE p.id=%s', array(
                          intval( $toVillageRow['player_id'] ) 
                     ) ) );
                     if ( $hero_in_village_id > 0 && $hero_in_village_id == $toVillageRow['id'] ) {
                         $_hasHero = TRUE;
                     }
-                }
+                } */
+				
                 $defenseTroops[$tvid] = $this->_getDefenseTroopsForVillage( ( $tvid == -1 ? $toVillageRow['id'] : $tvid ), $vtroops, $_hasHero, $toVillageRow['people_count'], $wallPower, FALSE );
                 $totalDefensePower['infantry_power'] += $defenseTroops[$tvid]['infantry_power'];
                 $totalDefensePower['cavalry_power'] += $defenseTroops[$tvid]['cavalry_power'];
             }
         }
-        $warResult         = $this->getWarResult( $attackTroops, $defenseTroops, $totalDefensePower, $wallLevel, $palLevel, $taskRow['proc_type'] == QS_WAR_ATTACK_PLUNDER, $procInfo['troopsArray']['onlyHero'] ? TRUE : FALSE );
-        $harvestResources  = '0 0 0 0';
-        $harvestInfoStruct = array(
-             'string' => $harvestResources,
-            'sum' => 0 
-        );
+		
+		// Calcolo risultato battaglia
+        $warResult = $this->getWarResult( $attackTroops, $defenseTroops, $totalDefensePower, $wallLevel, $palLevel, $taskRow[
+							'proc_type'] == QS_WAR_ATTACK_PLUNDER, $procInfo['troopsArray']['onlyHero'] ? TRUE : FALSE );
+        
+		// Bottino
+		$harvestResources  = '0 0 0 0';
+        $harvestInfoStruct = array( 'string' => $harvestResources,'sum' => 0 );
         if ( !$warResult['all_attack_killed'] ) {
-            $harvestInfoStruct = $this->_harvestTroopsFrom( $toVillageRow, $warResult['attackTroops']['total_carry_load'], $crannyTotalSize );
+            $harvestInfoStruct = $this->_harvestTroopsFrom( $toVillageRow, $warResult['attackTroops']['total_carry_load'], 
+															$crannyTotalSize );
             $harvestResources  = $harvestInfoStruct['string'];
         }
+		
+		// Riduce consumo di grano
         $reduceConsumption = $warResult['attackTroops']['total_dead_consumption'];
         if ( $warResult['all_attack_killed'] && $procInfo['troopsArray']['hasHero'] ) {
             $reduceConsumption += $GameMetadata['troops'][$procInfo['troopsArray']['heroTroopId']]['crop_consumption'];
@@ -155,13 +163,8 @@ class WarBattleModel extends BattleModel
         if ( $reduceConsumption > 0 ) {
             $this->_updateVillage( $fromVillageRow, $reduceConsumption, $warResult['all_attack_killed'] && $procInfo['troopsArray']['hasHero'] );
         }
-        if ( $procInfo['troopsArray']['hasHero'] && $warResult['defense_total_dead_number'] >= 1 ) {
-            $heroStatisticPoint = ceil( 5 * $warResult['defense_total_dead_number'] / 100 );
-            $this->provider->executeQuery( 'UPDATE p_players p SET p.hero_points=p.hero_points+%s WHERE p.id=%s', array(
-                 $heroStatisticPoint,
-                intval( $fromVillageRow['player_id'] ) 
-            ) );
-        }
+		
+		// Truppe Difensore, Rinforzi ecc... Da controllare ma dovrebbe essere giusto
         $defenseTroopsStr         = '';
         $defenseReduceConsumption = 0;
         $reportTroopTable         = array( );
@@ -277,6 +280,10 @@ class WarBattleModel extends BattleModel
                 intval( $_tovid ) 
             ) );
         }
+		
+		// Catapulte
+		// Le cata dovrebbero distruggere anche se non sopravvivono tutte le truppe, da controllare 
+		// dovrebbe bastare togliere !$warResult['all_attack_killed'] nel controllo
         $villageTotallyDestructed = FALSE;
         $wallDestructionResult    = '';
         $catapultResult           = '';
@@ -302,7 +309,7 @@ class WarBattleModel extends BattleModel
                     if ( $dropLevels > 0 ) {
                         $wallDestructionResult = $wallLevel . '-' . ( $wallLevel - $dropLevels );
                         $wallLevel -= $dropLevels;
-                        $mq = new QueueJobModel();
+                        // $mq = new QueueJobModel ();
                         while ( 0 < $dropLevels-- ) {
                             $mq->upgradeBuilding( $toVillageRow['id'], $wallBid, $wallItemId, TRUE );
                         }
@@ -372,7 +379,7 @@ class WarBattleModel extends BattleModel
                                 $dropBuildingLevels = $catapultTargetInfoItem['level'];
                             }
                             $catapultResult .= $catapultTargetInfoItem['item_id'] . ' ' . $catapultTargetInfoItem['level'] . ' ' . ( $catapultTargetInfoItem['level'] - $dropBuildingLevels );
-                            $mq = new QueueJobModel();
+                            // $mq = new QueueJobModel ();
                             while ( 0 < $dropBuildingLevels-- ) {
                                 $mq->upgradeBuilding( $toVillageRow['id'], $catapultTargetInfoItem['id'], $catapultTargetInfoItem['item_id'], TRUE );
                             }
@@ -459,6 +466,10 @@ class WarBattleModel extends BattleModel
             }
         }
 		*/
+		
+		// Conquista villaggio
+		// Un player dovrebbe potersi conquistare il villo (da provare)
+		// Basterebbe togliere $toVillageRow['player_id'] != $fromVillageRow['player_id'] dal controllo
         $doTroopsBack    = TRUE;
         $villageCaptured = FALSE;
         $captureResult   = '';
@@ -485,8 +496,7 @@ class WarBattleModel extends BattleModel
             }
             if ( $kingIsLive && $b25_26_exists ) {
                 $captureResult = '#';
-            }
-            if ( $kingIsLive && !$b25_26_exists ) {
+            } elseif ( $kingIsLive && !$b25_26_exists ) {
                 $elapsedTimeInSeconds = $toVillageRow['elapsedTimeInSeconds'];
                 $addValue             = $elapsedTimeInSeconds * 10 / 3600;
                 $total                = round( $toVillageRow['allegiance_percent'] + $addValue );
@@ -524,6 +534,8 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
+		
+		// Conquista Oasi
         $oasisResult = '';
         if ( $procInfo['troopsArray']['hasHero'] && $toVillageRow['is_oasis'] && !$warResult['all_attack_killed'] && $warResult['all_defense_killed'] && $toVillageRow['player_id'] != $fromVillageRow['player_id'] && 10 <= $heroBuildingLevel ) {
             $canCaptureOasis    = FALSE;
@@ -555,31 +567,33 @@ class WarBattleModel extends BattleModel
                 }
                 ++$mi;
             }
+			// Il secondo if non ha senso, conquista sempre l'oasi, da provare e correggere
             if ( $canCaptureOasis && $oasisInRang ) {
                 $qm = new QueueJobModel();
-                if ( intval( $toVillageRow['player_id'] ) == 0 ) {
+				$allegiance_percent = $toVillageRow['allegiance_percent'];
+             /* if ( intval( $toVillageRow['player_id'] ) == 0 ) {
                     $oasisResult = '+';
                     $qm->captureOasis( $toVillageRow['id'], $fromVillageRow['player_id'], $fromVillageRow['id'], TRUE );
+                } else { */
+				$allegiance_percent = $toVillageRow['allegiance_percent'];
+                $allegiance_percent -= rand( 20, 30 );
+                if ( $allegiance_percent > 0 ) {
+                	$oasisResult = $toVillageRow['allegiance_percent'] . '-' . $allegiance_percent;
+                    $this->provider->executeQuery( 'UPDATE p_villages v SET v.allegiance_percent=%s WHERE v.id=%s', array(
+            						             $allegiance_percent, intval( $toVillageRow['id'] ) ) );
                 } else {
-                    $allegiance_percent = $toVillageRow['allegiance_percent'];
-                    $allegiance_percent -= 25;
-                    if ( $allegiance_percent > 0 ) {
-                        $oasisResult = $toVillageRow['allegiance_percent'] . '-' . $allegiance_percent;
-                        $this->provider->executeQuery( 'UPDATE p_villages v SET v.allegiance_percent=%s WHERE v.id=%s', array(
-                             $allegiance_percent,
-                            intval( $toVillageRow['id'] ) 
-                        ) );
-                    } else {
-                        $allegiance_percent = 0;
-                        $oasisResult        = '+';
-                    }
-                    if ( $allegiance_percent == 0 ) {
-                        $qm->captureOasis( $toVillageRow['id'], $toVillageRow['player_id'], $toVillageRow['parent_id'], FALSE );
-                        $qm->captureOasis( $toVillageRow['id'], $fromVillageRow['player_id'], $fromVillageRow['id'], TRUE );
-                    }
+                    $allegiance_percent = 0;
+                    $oasisResult = '+';
+                }
+				// Perchè 2? Da controlare...
+                if ( $allegiance_percent == 0 ) {
+                    // $qm->captureOasis( $toVillageRow['id'], $toVillageRow['player_id'], $toVillageRow['parent_id'], FALSE );
+                    $qm->captureOasis( $toVillageRow['id'], $fromVillageRow['player_id'], $fromVillageRow['id'], TRUE );
                 }
             }
         }
+		
+		// Artefati
         $artefactResult = '';
         if ( $procInfo['troopsArray']['hasHero'] && $toVillageRow['artefacts'] != '' && !$warResult['all_attack_killed'] && $warResult['all_defense_killed'] && $toVillageRow['player_id'] != $fromVillageRow['player_id'] && 10 <= $TreasuryLevel ) {
             $checkToVillageRow = $this->_getVillageInfo( $taskRow['to_village_id'] );
@@ -667,6 +681,24 @@ class WarBattleModel extends BattleModel
                 $defenseReportTroops .= $defenseReportTroops1;
             }
         }
+		
+		// Aumeta punti eroe
+        if ( $procInfo['troopsArray']['hasHero'] && $warResult['defense_total_dead_number'] >= 1 ) {
+			if( $toVillageRow['is_oasis'] ){
+				$heroStatisticPoint = $warResult['defense_total_dead_number'];
+				$this->provider->executeQuery( 'UPDATE p_players p SET p.hero_points=p.hero_points+%s WHERE p.id=%s', array(
+					 $heroStatisticPoint,
+					intval( $fromVillageRow['player_id'] ) 
+				) );
+			} else {
+				$heroStatisticPoint = $defenseReduceConsumption;
+				$this->provider->executeQuery( 'UPDATE p_players p SET p.hero_points=p.hero_points+%s WHERE p.id=%s', array(
+					 $heroStatisticPoint,
+					intval( $fromVillageRow['player_id'] ) 
+				) );
+			}
+        }
+		
         $timeInSeconds = $taskRow['remainingTimeInSeconds'];
         $attackDigit   = 0;
         $defenseDigit  = 0;
@@ -933,7 +965,7 @@ class WarBattleModel extends BattleModel
         $bStr            = trim( $reCheckBuilding );
         if ( $bStr != '' ) {
             $bStrArr = explode( ',', $bStr );
-            $mq      = new QueueJobModel();
+            // $mq = new QueueJobModel ();
             $ccb     = 0;
             foreach ( $bStrArr as $b2Str ) {
                 ++$ccb;
