@@ -576,7 +576,7 @@ class WarBattleModel extends BattleModel
                     $qm->captureOasis( $toVillageRow['id'], $fromVillageRow['player_id'], $fromVillageRow['id'], TRUE );
                 } else { */
 				$allegiance_percent = $toVillageRow['allegiance_percent'];
-                $allegiance_percent -= rand( 20, 30 );
+                $allegiance_percent -= mt_rand( 20, 30 );
                 if ( $allegiance_percent > 0 ) {
                 	$oasisResult = $toVillageRow['allegiance_percent'] . '-' . $allegiance_percent;
                     $this->provider->executeQuery( 'UPDATE p_villages v SET v.allegiance_percent=%s WHERE v.id=%s', array(
@@ -595,7 +595,8 @@ class WarBattleModel extends BattleModel
 		
 		// Artefati
         $artefactResult = '';
-        if ( $procInfo['troopsArray']['hasHero'] && $toVillageRow['artefacts'] != '' && !$warResult['all_attack_killed'] && $warResult['all_defense_killed'] && $toVillageRow['player_id'] != $fromVillageRow['player_id'] && 10 <= $TreasuryLevel ) {
+        if ( $procInfo['troopsArray']['hasHero'] && $toVillageRow['artifact_id'] != NULL && !$warResult['all_attack_killed'] && 
+			$warResult['all_defense_killed'] && $toVillageRow['player_id'] != $fromVillageRow['player_id'] && 10 <= $TreasuryLevel ) {
             $checkToVillageRow = $this->_getVillageInfo( $taskRow['to_village_id'] );
             $b27_exists        = FALSE;
             $bStr              = trim( $checkToVillageRow['buildings'] );
@@ -633,6 +634,7 @@ class WarBattleModel extends BattleModel
                 }
             }
         }
+		
         $newTroops = '';
         foreach ( $warResult['attackTroops']['troops'] as $tid => $tprop ) {
             if ( $newTroops != '' ) {
