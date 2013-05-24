@@ -524,21 +524,12 @@ if ($this->selectedTabIndex == 1) {
 
 
 if ($this->selectedTabIndex == 2) {
-	if ($this->isAdmin) {
-		echo '<s';
-		echo 'cript type="text/javascript">
-function openResourceSet(vid) {
-	p = document.getElementById("ce");
-	if (p!=null) {
-		p.innerHTML = \'<div id="_pwin" class="popup3"><div id="drag" onmousedown="dragStart(event, \'_pwin\')"></div><a href="#" onClick="hideManual(); return false;"><img src="assets/x.gif" border="1" class="popup4" alt="Move"></a><iframe frameborder="0" id="Frame" src="resources.php?avid=\'+vi';
-		echo 'd+\'" width="412" height="440" border="0"></iframe></div>\';
-	}
-
-	return false;
-}
-</script>
-';
-	}
+	if ( $this->isAdmin )
+    {
+        echo "<s";
+        echo "cript type=\"text/javascript\">\r\nfunction openResourceSet(vid) {\r\n\tp = document.getElementById(\"ce\");\r\n\tif (p!=null) {\r\n\t\tp.innerHTML = '<div id=\"_pwin\" class=\"popup3\"><div id=\"drag\" onmousedown=\"dragStart(event, \\'_pwin\\')\"></div><a href=\"#\" onClick=\"hideManual(); return false;\"><img src=\"assets/x.gif\" border=\"1\" class=\"popup4\" alt=\"Move\"></a><iframe frameborder=\"0\" id=\"Frame\" src=\"resources.php?avid='+vi";
+        echo "d+'\" width=\"412\" height=\"440\" border=\"0\"></iframe></div>';\r\n\t}\r\n\r\n\treturn false;\r\n}\r\n</script>\r\n";
+    }
 
 	echo '<table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">
 	<thead>
@@ -603,13 +594,13 @@ function openResourceSet(vid) {
 		   ';
 
 		if ($this->isAdmin) {
-			echo '<td class="ra"><a href="#" onclick="return openResourceSet(';
-			echo $this->dataList->row['id'];
-			echo ');"><img src="assets/x.gif" class="r4" alt="';
-			echo LANGUI_STAT_T27;
-			echo '" title="';
-			echo LANGUI_STAT_T27;
-			echo '"></a></td>';
+	            echo "<td class=\"ra\"><a href=\"#\" onclick=\"return openResourceSet(";
+            echo $this->dataList->row['id'];
+            echo ");\"><img src=\"assets/x.gif\" class=\"r4\" alt=\"";
+            echo LANGUI_STAT_T27;
+            echo "\" title=\"";
+            echo LANGUI_STAT_T27;
+            echo "\"></a></td>";
 		}
 
 		echo '		</tr>
