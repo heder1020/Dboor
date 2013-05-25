@@ -36,7 +36,11 @@ if ( $this->selectedTabIndex == 3 ) {
 }
 echo ">";
 echo LANGUI_VIL4_T4;
-echo "</a>\r\n ";
+echo "</a>\r\n | <a href=\"village4.php?t=4\"";
+if ( $this->selectedTabIndex == 4 ) {
+    echo " class=\"selected\"";
+}
+echo ">Troops</a>\r\n ";
 echo "</div>\r\n";
 if ( $this->selectedTabIndex == 0 ) {
 ?>
@@ -294,23 +298,45 @@ WHERE v.player_id = $id AND v.is_oasis = 0 ORDER BY v.village_name ASC
     }
     echo '</tbody></table>';
 }
-/*if ( $this->selectedTabIndex == 4 ) {
+if ( $this->selectedTabIndex == 4 ) {
+	$pid  = $this->player->playerId;
 ?>
 <table id="troops" cellpadding="1" cellspacing="1">
-<thead><tr><th colspan="12">Own troops</th></tr><tr>
-<td>Village</td>
-<?php
-?>
-</tr></thead><tbody>
-<?php
-?>
-
+	<thead>
+    <tr><th colspan="12">Own troops</th></tr>
+    <tr>
+		<td>Village</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td>
+        </tr></thead><tbody>
+		<?php
+		$villi = mysql_query("SELECT * FROM p_villages WHERE player_id = $pid");		
+		$truppe_totali = array(0,0,0,0,0,0,0,0,0,0,0);
+		while ( $riga = mysql_fetch_array( $villi )) {
+			$truppe_villo = $riga['troops_num'];
+			$truppe_villo = explode("-1:",$truppe_villo);
+			$truppe_villo = explode(",", $truppe_villo[1]);
+	
+			echo'<tr>
+					<td><a href="village1.php?vid='.$riga['id'].'">'.$riga['village_name'].'</a></td>';
+					for($i = 0; $i <= 10; $i++){
+					$truppa = explode(" ", $truppe_villo[$i]);
+					echo'<td>'.$truppa[1].'</td>';
+					$truppe_totali[$i] += $truppa[1];
+					}
+			echo '</tr>';
+		}
+        
+		?>
+        <tr></tr>
 <tr>
 <th>Sum</th>
 <?php
+for($i = 0; $i <= 10; $i++)
+	echo'<td>'.$truppe_totali[$i].'</td>';
+
 ?>
-</tr></tbody></table>
+</tr>
+</tbody></table>
 <?php
-} */
+} 
 
 ?>
