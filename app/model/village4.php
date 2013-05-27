@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class Village4Model extends ModelBase
 {
 

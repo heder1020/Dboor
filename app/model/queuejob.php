@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 require_once( MODEL_PATH . 'report.php' );
 require_once( MODEL_PATH . 'mutex.php' );
 class QueueJobModel extends ModelBase

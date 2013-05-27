@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class StatisticsModel extends ModelBase {
 	function tatarRaised() {
 		return $this->provider->fetchScalar( 'SELECT COUNT(*) FROM p_queue q WHERE q.proc_type=%s', array( QS_TATAR_RAISE ) ) == 0;

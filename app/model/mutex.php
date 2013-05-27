@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 define( "__QS_LOCK_FS_", APP_PATH . "lock" );
 class MutexModel extends ModelBase
 {

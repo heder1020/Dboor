@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class IndexModel extends ModelBase {
 	function getIndexSummary() {
 		$sessionTimeoutInSeconds = $GLOBALS['GameMetadata']['session_timeout'] * 60;

@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class VillageModel extends ModelBase {
 	function getLatestReports($playerId, $villageId) {
 		return $this->provider->fetchResultSet( 'SELECT

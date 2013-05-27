@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class MapModel extends ModelBase {
 	function getVillagesMatrix($matrixStr) {
 		return $this->provider->fetchResultSet( 'SELECT

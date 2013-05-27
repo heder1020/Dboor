@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class RegisterModel extends ModelBase {
 	function isPlayerNameExists($playerName) {
 		return 0 < $this->provider->fetchScalar( 'SELECT COUNT(*) FROM p_players p WHERE p.name=\'%s\'', array( $playerName ) );

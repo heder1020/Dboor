@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class GlobalModel extends ModelBase {
 	function getSiteNews() {
 		return $this->provider->fetchScalar( 'SELECT gs.news_text FROM g_summary gs' );

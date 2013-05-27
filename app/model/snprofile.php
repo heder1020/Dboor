@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class SNprofileModel extends ModelBase {
 	function SendNews($post) {
 		$this->provider->executeQuery( 'INSERT INTO `p_profile` SET

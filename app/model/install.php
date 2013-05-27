@@ -7,6 +7,11 @@
  * @   Project     :   DBOOR Full Decoded
  *
  **/
+ 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 require_once( MODEL_PATH . 'register.php' );
 require_once( MODEL_PATH . 'queue.php' );
 class SetupModel extends ModelBase

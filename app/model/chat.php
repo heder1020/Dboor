@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class ChatModel extends ModelBase {
 	function SendToChat($username, $id, $text) {
 		$this->provider->executeQuery( 'INSERT INTO `g_chat` SET

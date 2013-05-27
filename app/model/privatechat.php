@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class PrivateChatModel extends ModelBase {
 	function SendToChat($from, $playerId, $avatar, $to, $to_id, $message) {
 		$user = $this->provider->fetchScalar( 'SELECT `avatar` FROM `p_players` WHERE `id` = \'%s\';', array( $to_id ) );

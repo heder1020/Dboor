@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class ReportModel extends ModelBase {
 	var $maxReportBoxSize = 25;
 

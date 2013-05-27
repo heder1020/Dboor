@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class AdvertisingModel extends ModelBase {
 	function Advertising($post, $type) {
 		if ($type == 'add') {

@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class ActivateModel extends ModelBase {
 	function doActivation($code) {
 		if ($this->provider->executeQuery2( 'UPDATE p_players p SET p.is_active=1 WHERE p.activation_code=\'%s\' AND p.is_active=0', array( $code ) )) {

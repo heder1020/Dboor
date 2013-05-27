@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class MessageModel extends ModelBase {
 	var $maxMailBoxSize = 50;
 

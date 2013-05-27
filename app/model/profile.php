@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class ProfileModel extends ModelBase {
    function getPlayerIdByName($playerName) {
       return $this->provider->fetchScalar( 'SELECT p.id FROM p_players p WHERE p.name=\'%s\'', array( $playerName ) );

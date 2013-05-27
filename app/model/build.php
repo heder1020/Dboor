@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class BuildModel extends ModelBase {
 	function getVillageOases($villageOasesid) {
 		if ($villageOasesid == '') {

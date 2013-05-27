@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class PasswordModel extends ModelBase {
 	function isPlayerIdExists($playerId) {
 		return 0 < $this->provider->fetchScalar( 'SELECT COUNT(*) FROM p_players p WHERE p.id=%s', array( $playerId ) );

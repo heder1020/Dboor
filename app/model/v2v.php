@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class WarModel extends ModelBase {
 	function getPlayerDataById($playerId) {
 		$GameMetadata = $GLOBALS['GameMetadata'];

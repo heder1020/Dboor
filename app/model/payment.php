@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class PaymentModel extends ModelBase {
 	function incrementPlayerGold($playerId, $goldNumber) {
 		$this->provider->executeQuery( 'UPDATE p_players p

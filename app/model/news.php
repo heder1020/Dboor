@@ -8,6 +8,11 @@
 * @   Project     :   DBOOR Full Decoded
 *
 **/
+
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class NewsModel extends ModelBase {
 	function getSiteNews() {
 		return $this->provider->fetchScalar( 'SELECT g.news_text FROM g_summary g' );

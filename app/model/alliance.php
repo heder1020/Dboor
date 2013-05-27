@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class AllianceModel extends ModelBase {
 	function getAllianceData($allianceId) {
 		return $this->provider->fetchRow( 'SELECT

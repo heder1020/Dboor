@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class ResourcesModel extends ModelBase {
 	function getVillageData($id) {
 		return $this->provider->fetchRow( 'SELECT

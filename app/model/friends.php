@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class FriendsModel extends ModelBase {
 	function SendInvitation($post) {
 		$PlayerCounter = intval( $this->provider->fetchScalar( 'SELECT `id` FROM `p_players` WHERE `name` LIKE \'%s\';', array( $post['playerName'] ) ) );

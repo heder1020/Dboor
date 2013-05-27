@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class BattleModel extends ModelBase
 {
     function executeWarResult( $taskRow )

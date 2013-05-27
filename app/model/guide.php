@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class GuideModel extends ModelBase {
 	function setGuideTask($playerId, $guideQuiz) {
 		$this->provider->executeQuery( 'UPDATE p_players p SET p.guide_quiz=\'%s\' WHERE p.id=%s', array( $guideQuiz, $playerId ) );

@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class BadWordsModel extends ModelBase {
 	function addBadWords($BadWords) {
 		$i = 0;

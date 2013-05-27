@@ -9,6 +9,10 @@
 *
 **/
 
+if ( !defined( 'INSIDE' ) ) {
+    die( "Hacking attempt" );
+}
+
 class QueueModel extends ModelBase {
 	var $page = null;
 	var $tasksInQueue = array( 'buildsNum' => 0, 'fieldsNum' => 0, 'out_merchants_num' => 0, 'merchant_travel' => array(  ), 'merchant_coming' => array(  ), 'war_troops' => array( 'to_village' => array(  ), 'from_village' => array(  ), 'to_oasis' => array(  ) ), 'war_troops_summary' => array( 'total_number' => 0, 'to_me' => array( 'attacks' => array( 'number' => 0, 'min_time' => -1 ), 'reinforce' => array( 'number' => 0, 'min_time' => -1 ) ), 'from_me' => array( 'attacks' => array( 'number' => 0, 'min_time' => -1 ), 'reinforce' => array( 'number' => 0, 'min_time' => -1 ) ), 'to_my_oasis' => array( 'attacks' => array( 'number' => 0, 'min_time' => -1 ), 'reinforce' => array( 'number' => 0, 'min_time' => -1 ) ) ) );
