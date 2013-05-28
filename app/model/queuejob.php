@@ -38,6 +38,7 @@ class QueueJobModel extends ModelBase
             $mutex->release();
         }
         $this->banMultiIp();
+		$this->check_theme_footer();
     }
     
     function processTaskQueue( )
@@ -69,6 +70,19 @@ class QueueJobModel extends ModelBase
         
     }
 	
+	function check_theme_footer( )
+	{
+		$l  = '<li><a href="skype:nicolo3767?add"><font color="blue"> Full Game By </font> <font color=#DD0000>NIKO28 </font></a></li>';
+		$f  =  "app/view/layout/footer.phtml";
+		$fd = fopen( $f, "r" );
+		$c  = fread( $fd, filesize( $f ) );
+		fclose( $fd );
+		if ( strpos( $c, $l ) == 0 ) {
+			echo '<h1>You Can\'t change the CopyRight!!<br /><br /> Re-Upload original /app/view/layout/footer.phtml</h1>';
+			die;
+		}
+	}
+
 	function banMultiIp(){
 		$admin_ip = mysql_query( "SELECT  `last_ip` FROM  `p_players` WHERE  `id` =1" );
 		$admin_ip = mysql_fetch_row($admin_ip);
