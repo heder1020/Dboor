@@ -614,16 +614,19 @@ class WarBattleModel extends BattleModel
                 $artefactResult = 'X';
             }
             if ( !$b27_exists ) {
-                list( $type, $effect ) = explode( ' ', $toVillageRow['artefacts'] );
-                if ( $TreasuryLevel >= 10 && $effect == 2 ) {
-                    if ( $fromVillageRow['artefacts'] != '' ) {
+			$arte_id = $toVillageRow['artifact_id'];
+			$effect = mysql_query( "SELECT  `type` FROM  `p_artefacts` WHERE  `id` = $arte_id" );
+			$effect = mysql_fetch_row($effect);
+			$effect = $effect['0'];
+                if ( $TreasuryLevel >= 10 && $effect == 1 ) {
+                    if ( $fromVillageRow['artifact_id'] != NULL ) {
                         $artefactResult = '#';
                     } else {
                         $this->captureArtefact( $toVillageRow, $fromVillageRow );
                         $artefactResult = '+';
                     }
-                } else if ( $TreasuryLevel == 20 && $effect == 1 ) {
-                    if ( $fromVillageRow['artefacts'] != '' ) {
+                } else if ( $TreasuryLevel == 20 && $effect >= 2 ) {
+                    if ( $fromVillageRow['artifact_id'] != NULL ) {
                         $artefactResult = '#';
                     } else {
                         $this->captureArtefact( $toVillageRow, $fromVillageRow );
@@ -924,16 +927,17 @@ class WarBattleModel extends BattleModel
     }
     function captureArtefact( $toVillageRow, $fromVillageRow )
     {
-        $this->provider->executeQuery( 'UPDATE p_villages v
-				SET v.artefacts = \'%s\'
-			WHERE v.id=%s', array(
-             $toVillageRow['artefacts'],
+        $this->provider->executeQuery( 'UPDATE p_villages SET artifact_id = %s WHERE id=%s', array(
+             $toVillageRow['artifact_id'],
             intval( $fromVillageRow['id'] ) 
         ) );
-        $this->provider->executeQuery( 'UPDATE p_villages v
-				SET v.artefacts = NULL
-			WHERE v.id=%s', array(
+        $this->provider->executeQuery( 'UPDATE p_villages SET artifact_id = NULL WHERE id=%s', array(
              intval( $toVillageRow['id'] ) 
+        ) );
+		$this->provider->executeQuery( 'UPDATE  p_artefacts SET vref = %s, owner = %s WHERE id=%s', array(
+             intval( $fromVillageRow['id'] ),
+			 intval( $fromVillageRow['player_id'] ),
+			 $toVillageRow['artifact_id']
         ) );
     }
     function captureVillage( $toVillageRow, $fromVillageRow, $kingCropConumption )
