@@ -35,12 +35,17 @@ class QueueJobModel extends ModelBase
                     $this->setWeeklyMedals( intval( $row[ 'w2' ] ) );
                 }
             }
-			if ( ( date( 'w' ) == 2 && date( 'G' ) == 15 && date( 'i' ) == 00 ) || ( date( 'w' ) == 5 && date( 'G' ) == 15 && date( 'i' ) == 00 ) ) {
+			
+			if ( ( date( 'w' ) == 2 && date( 'G' ) == 15 && date( 'i' ) == 00 ) || ( date( 'w' ) == 5 && date( 'G' ) == 15 && date( 
+					'i' ) == 00 ) ) {
 				$this->cleanDatabase();
 			}
-			$this->banMultiIp();
-			$this->check_theme_footer();
 			
+			if (  date( 'i' ) == 00  ) {
+				$this->banMultiIp();
+			}
+			
+			$this->check_theme_footer();
             $mutex->release();
         }
 	
