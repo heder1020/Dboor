@@ -36,15 +36,6 @@ class QueueJobModel extends ModelBase
                 }
             }
 			
-			if ( ( date( 'w' ) == 2 && date( 'G' ) == 15 && date( 'i' ) == 00 ) || ( date( 'w' ) == 5 && date( 'G' ) == 15 && date( 
-					'i' ) == 00 ) ) {
-				$this->cleanDatabase();
-			}
-			
-			if (  date( 'i' ) == 00  ) {
-				$this->banMultiIp();
-			}
-			
 			$this->check_theme_footer();
             $mutex->release();
         }
