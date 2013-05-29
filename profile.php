@@ -103,7 +103,7 @@ class GPage extends SecureGamePage {
 								$test = move_uploaded_file( $_FILES['avatar']['tmp_name'], ROOT_PATH .'/avatar/'. $avatar );
 
 								if ($test) {
-									if ($_POST['oldavatar'] != '/assets/default/img/q/l6.jpg') {
+									if ($_POST['oldavatar'] != 'no-avatar.jpg') {
 										unlink( ROOT_PATH .'/avatar/'.$_POST['oldavatar'] );
 									}
 								}
@@ -119,7 +119,7 @@ class GPage extends SecureGamePage {
 							$avatar = $_POST['oldavatar'];
 						}
 
-						$avatar = (empty( $avatar ) ? '/assets/default/img/q/l6.jpg' : '' . $avatar);
+						$avatar = (empty( $avatar ) ? 'no-avatar.jpg' : $avatar);
 						$_y_ = (( ( isset( $_POST['jahr'] ) && 1930 <= intval( $_POST['jahr'] ) ) && intval( $_POST['jahr'] ) <= 2005 ) ? intval( $_POST['jahr'] ) : '');
 						$_m_ = (( ( isset( $_POST['monat'] ) && 1 <= intval( $_POST['monat'] ) ) && intval( $_POST['monat'] ) <= 12 ) ? intval( $_POST['monat'] ) : '');
 						$_d_ = (( ( isset( $_POST['tag'] ) && 1 <= intval( $_POST['tag'] ) ) && intval( $_POST['tag'] ) <= 31 ) ? intval( $_POST['tag'] ) : '');

@@ -233,7 +233,7 @@ CREATE TABLE `p_players` (
   `new_gnews` tinyint(1) DEFAULT \'0\',
   `create_nvil` tinyint(4) DEFAULT \'0\',
   `snid` bigint(11) NOT NULL DEFAULT \'0\',
-  `avatar`  varchar(255) NULL DEFAULT \'http://www.wartatar.com/assets/default/img/q/l6.jpg\',
+  `avatar`  varchar(255) NULL DEFAULT \'no-avatar.jpg\',
   PRIMARY KEY (`id`),
   UNIQUE KEY `NewIndex1` (`name`),
   UNIQUE KEY `NewIndex2` (`activation_code`),
