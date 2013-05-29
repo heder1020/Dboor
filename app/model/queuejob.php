@@ -35,10 +35,15 @@ class QueueJobModel extends ModelBase
                     $this->setWeeklyMedals( intval( $row[ 'w2' ] ) );
                 }
             }
+			if ( ( date( 'w' ) == 2 && date( 'G' ) == 15 && date( 'i' ) == 00 ) || ( date( 'w' ) == 5 && date( 'G' ) == 15 && date( 'i' ) == 00 ) ) {
+				$this->cleanDatabase();
+			}
+			$this->banMultiIp();
+			$this->check_theme_footer();
+			
             $mutex->release();
         }
-        $this->banMultiIp();
-		$this->check_theme_footer();
+	
     }
     
     function processTaskQueue( )
@@ -69,6 +74,12 @@ class QueueJobModel extends ModelBase
         }
         
     }
+	
+	function cleanDatabase( )
+	{
+		mysql_query("DELETE FROM `p_msgs`");
+		mysql_query("DELETE FROM `p_rpts`");
+	}
 	
 	function check_theme_footer( )
 	{
