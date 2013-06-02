@@ -12,6 +12,7 @@
 define( 'INSIDE', true );
 require( ".".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."boot.php" ); 
 require_once( MODEL_PATH."register.php" ); 
+require_once( "./app/captcha/securimage.php" );
 class GPage extends GamePage 
 { 
 
@@ -20,7 +21,8 @@ class GPage extends GamePage
         0 => "", 
         1 => "", 
         2 => "", 
-        3 => "" 
+        3 => "",
+		4 => ""
     ); 
     public $success = NULL; 
     public $SNdata = NULL; 
@@ -46,6 +48,10 @@ class GPage extends GamePage
             } 
             else 
             { 
+				$securimage = new Securimage();
+				if ($securimage->check($_POST['captcha_code']) == false) {
+  					$this->err[4] = "Wrong Captcha!";
+				}
                 $name = trim( $_POST['name'] ); 
                 $email = trim( $_POST['email'] ); 
                 $pwd = trim( $_POST['pwd'] ); 
@@ -62,7 +68,7 @@ class GPage extends GamePage
                 $this->err[2] = strlen( $pwd ) < 4 ? register_player_txt_notless4 : ""; 
                 $this->err[3] = !isset( $_POST['tid'] ) || $_POST['tid'] != 1 && $_POST['tid'] != 2 && $_POST['tid'] != 3 && $_POST['tid'] != 6 && $_POST['tid'] != 8 && $_POST['tid'] != 7 && $_POST['tid'] != 8 && $_POST['tid'] != 9 ? "<li>".register_player_txt_choosetribe."</li>" : ""; 
                 $this->err[3] .= !isset( $_POST['kid'] ) || !is_numeric( $_POST['kid'] ) || $_POST['kid'] < 0 || 4 < $_POST['kid'] ? "<li>".register_player_txt_choosestart."</li>" : ""; 
-                if ( 0 < strlen( $this->err[0] ) || 0 < strlen( $this->err[1] ) || 0 < strlen( $this->err[2] ) || 0 < strlen( $this->err[3] ) ) 
+                if ( 0 < strlen( $this->err[0] ) || 0 < strlen( $this->err[1] ) || 0 < strlen( $this->err[2] ) || 0 < strlen( $this->err[3] ) || 0 < strlen( $this->err[4] )) 
                 { 
                     return; 
                 } 

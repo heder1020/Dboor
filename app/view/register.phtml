@@ -211,8 +211,14 @@ if (!$this->success) {
 
 <ul class="important">';
 	echo $this->err[3];
-	echo '</ul>
-<p class="btn"><input type="image" value="anmelden" name="s1" id="btn_signup" class="dynamic_img" src="assets/x.gif" alt="';
+	echo '</ul><center>
+	<img id="captcha" src="/app/captcha/securimage_show.php" alt="CAPTCHA Image" /> <br />
+<input type="text" name="captcha_code" size="10" maxlength="6" />
+<a href="#" onclick="document.getElementById(\'captcha\').src =
+ \'/app/captcha/securimage_show.php?\'
+ + Math.random(); return false">[ Different Image ]</a> </center> <br />';
+ echo '<ul class="important">'.$this->err[4].'</ul>';
+ echo'<p class="btn"><input type="image" value="anmelden" name="s1" id="btn_signup" class="dynamic_img" src="assets/x.gif" alt="';
 	echo LANGUI_REG_T16;
 	echo '"/></p>
 </form>
