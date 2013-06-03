@@ -47,22 +47,7 @@ DROP TABLE IF EXISTS `p_villages`;
 DROP TABLE IF EXISTS `g_chat`;
 DROP TABLE IF EXISTS `g_comment`;
 DROP TABLE IF EXISTS `p_friends`;
-DROP TABLE IF EXISTS `privatechat`;
 DROP TABLE IF EXISTS `p_artefacts`; 
-
-CREATE TABLE `privatechat` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `from` varchar(255) character set utf8 NOT NULL default \'\',
-  `from_img` varchar(200) NOT NULL default \'nophoto.gif\',
-  `from_id` int(11) NOT NULL default \'0\',
-  `to` varchar(255) character set utf8 NOT NULL default \'\',
-  `to_img` varchar(200) NOT NULL default \'nophoto.gif\',
-  `to_id` int(11) NOT NULL default \'0\',
-  `message` text character set utf8 NOT NULL,
-  `sent` datetime NOT NULL default \'0000-00-00 00:00:00\',
-  `recd` int(10) unsigned NOT NULL default \'0\',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE `p_comment` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
