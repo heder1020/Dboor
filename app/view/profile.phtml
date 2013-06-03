@@ -274,21 +274,7 @@ document.body.appendChild(layer);
 					</tr>
 					';
 	}
-
-	echo '					';
-
-	if ($this->profileData['tribe_id'] != 5) {
-		echo '                    <tr>
-						<td colspan="2"><a href="snprofile.php?uid=';
-		echo $this->profileData['id'];
-		echo '">';
-		echo LANGUI_PROFILE_T72;
-		echo '</a></td>
-					</tr>
-					';
-	}
-
-	echo '					<tr><td colspan="2" class="empty"></td></tr>
+	echo '<tr><td colspan="2" class="empty"></td></tr>
 					<tr>
 						<td colspan="2" class="desc2"><div class="desc2div">';
 	echo $this->getProfileDescription( $this->profileData['description2'] );

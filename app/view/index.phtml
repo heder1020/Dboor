@@ -68,9 +68,9 @@ echo'
                 <div class="trv_form_part">
                     <h2><br /></h2>
                     <ul>
-                        <li>250x</li>
-                        <li>250x</li>
-                        <li>20x</li>
+                        <li>'.$this->appConfig['Game']['speed'].'x</li>
+                        <li>'.$this->appConfig['Game']['attack'].'x</li>
+                        <li>'.$this->appConfig['Game']['capacity'].'x</li>
                     </ul>
 					<form name="login" action="index.php" method="post">
         			<div style="position: absolute;  top: 150px; left: 8px">    
@@ -96,8 +96,8 @@ echo'
         </form>
         <!-- NEWS 1 -->
         <div style="position: absolute;  top: 150px; left: 199px;height: 70px;">
-        <font size="1" color="gray"></font>        <br />
-        <font size="1"></font><!--News Mehet ide--><font size="2"><a href=\'register.php\'><b>REGISTER NOW</b></a></font>        </div>
+        <font size="1" color="gray"></font>
+        <font size="1">'.nl2br( $this->data['news_text'] ).' <br /><br /> <a href=\'register.php\'><b>REGISTER NOW</b></a> </font>        </div>
         
   
         
@@ -115,10 +115,10 @@ echo'
                     </div>
                     <!-- Screenshot-Slider -->
                     <div id="trv_wrap_img">
-                        <h3>'.nl2br( $this->data['news_text'] ).'</h3>
+					
                         <div class="trv_image_carousel">
                         
-                            <div class="clearfix"></div>
+                            <div class="clearfix"><div class="register"><a href="register.php"></div>
                     
                         </div>
                     </div>
