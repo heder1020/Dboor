@@ -1,14 +1,4 @@
 <?php
-
-/**
-*
-* @   Script Name :   village4.php
-* @   Author      :   NIKO28
-* @   Skype       :   nicolo3767
-* @   Project     :   DBOOR Full Decoded
-*
-**/
-
 define( 'INSIDE', true );
 require( "." . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . "boot.php" );
 require_once( MODEL_PATH . "village4.php" );
@@ -25,20 +15,16 @@ class GPage extends securegamepage
     public function load( )
     {
         parent::load();
-        $this->selectedTabIndex = isset( $_GET[ 't' ] ) && is_numeric( $_GET[ 't' ] ) && 0 <= intval( $_GET[ 't' ] ) && intval( $_GET[ 't' ] ) <= 5 ? intval( $_GET[ 't' ] ) : 0;
-		
-		$time = 0;
-		$tasks = $this->queueModel->tasksInQueue;
-
-		if (isset( $tasks[constant( 'QS_PLUS' . ( 1 ) )] )) {
-			$time = $tasks[constant( 'QS_PLUS' . ( 1 ) )][0]['remainingSeconds'];
-		}
-
-		if ( $time == 0 ){
-			header("location: plus.php");
-		}
+        $this->selectedTabIndex = isset( $_GET['t'] ) && is_numeric( $_GET['t'] ) && 0 <= intval( $_GET['t'] ) && intval( $_GET['t'] ) <= 5 ? intval( $_GET['t'] ) : 0;
+        $time                   = 0;
+        $tasks                  = $this->queueModel->tasksInQueue;
+        if ( isset( $tasks[constant( 'QS_PLUS' . ( 1 ) )] ) ) {
+            $time = $tasks[constant( 'QS_PLUS' . ( 1 ) )][0]['remainingSeconds'];
+        }
+        if ( $time == 0 ) {
+            header( "location: plus.php" );
+        }
     }
-	
     public function preRender( )
     {
         parent::prerender();
@@ -46,7 +32,6 @@ class GPage extends securegamepage
             $this->villagesLinkPostfix .= "&t=" . $this->selectedTabIndex;
         }
     }
-
 }
 $p = new GPage();
 $p->run();

@@ -1,14 +1,4 @@
 <?php
-
-/**
-*
-* @   Script Name :   v2v.php
-* @   Author      :   NIKO28
-* @   Skype       :   nicolo3767
-* @   Project     :   DBOOR Full Decoded
-*
-**/
-
 define( 'INSIDE', true );
 require '.' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'boot.php';
 require_once MODEL_PATH . 'v2v.php';
