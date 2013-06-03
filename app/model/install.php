@@ -131,7 +131,7 @@ CREATE TABLE `g_settings` (
   `license_key` varchar(50) DEFAULT NULL,
   `game_over` tinyint(1) DEFAULT \'0\',
   `game_transient_stopped` tinyint(1) DEFAULT \'0\',
-  `cur_week` smallint(6) DEFAULT \'0\',
+  `cur_week` smallint(6) DEFAULT \'1\',
   `win_pid` bigint(20) DEFAULT \'0\',
   `qlocked_date` datetime DEFAULT NULL,
   `qlocked` tinyint(1) DEFAULT \'0\'
