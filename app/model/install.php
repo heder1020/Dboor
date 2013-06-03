@@ -46,7 +46,6 @@ DROP TABLE IF EXISTS `p_rpts`;
 DROP TABLE IF EXISTS `p_villages`;
 DROP TABLE IF EXISTS `g_chat`;
 DROP TABLE IF EXISTS `g_comment`;
-DROP TABLE IF EXISTS `g_profile`;
 DROP TABLE IF EXISTS `p_friends`;
 DROP TABLE IF EXISTS `privatechat`;
 DROP TABLE IF EXISTS `p_artefacts`; 
@@ -64,17 +63,6 @@ CREATE TABLE `privatechat` (
   `recd` int(10) unsigned NOT NULL default \'0\',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-CREATE TABLE `p_profile` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) DEFAULT \'0\',
-  `message` text,
-  `date` varchar(250) DEFAULT NULL,
-  `image` VARCHAR(250) NOT NULL DEFAULT \'\',
-  `url` VARCHAR(250) NOT NULL DEFAULT \'\',
-  `youtube` VARCHAR(250) NOT NULL DEFAULT \'\',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `p_comment` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -393,8 +381,7 @@ CREATE TABLE `p_rpts` (
 
 
 INSERT INTO `g_settings`(`start_date`,`license_key`) VALUES (NOW(),NULL);
-INSERT INTO `g_summary`(`players_count`,`active_players_count`,`Arab_players_count`,`Roman_players_count`,`Teutonic_players_count`,`Gallic_players_count`,`news_text`) VALUES ( \'0\',\'0\',\'0\',\'0\',\'0\',\'0\',NULL);
-OPTIMIZE TABLE `g_banner`, `g_chat`, `g_settings`, `g_summary`, `g_words`, `privatechat`, `p_alliances`, `p_comment`, `p_friends`, `p_merchants`, `p_msgs`, `p_players`, `p_profile`, `p_queue`, `p_rpts`, `p_villages`;' );
+INSERT INTO `g_summary`(`players_count`,`active_players_count`,`Arab_players_count`,`Roman_players_count`,`Teutonic_players_count`,`Gallic_players_count`,`news_text`) VALUES ( \'0\',\'0\',\'0\',\'0\',\'0\',\'0\',NULL);' );
     }
     function _createMap( $map_size )
     {
