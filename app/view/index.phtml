@@ -39,7 +39,18 @@ echo ';</script>
 echo '<s';
 echo 'cript src="assets/core.js';
 echo $this->getAssetVersion(  );
-echo '" type="text/javascript"></script>
+echo '" type="text/javascript"></script>';
+?>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/it_IT/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<?php
+echo'
 	</head>
 <body>
 
@@ -100,7 +111,7 @@ echo '" type="text/javascript"></script>
                 <div class="trv_slider_area">
                     <!-- Facebook-Feld-->
                     <div class="trv_fb_field">
-                        
+                    <div class="fb-like-box" data-href="'.$this->appConfig['system']['facebook_url'].'" data-width="220" data-height="100" data-show-faces="true" data-stream="false" data-show-border="true" data-header="true"></div>
                     </div>
                     <!-- Screenshot-Slider -->
                     <div id="trv_wrap_img">

@@ -29,6 +29,7 @@ $AppConfig = array(
     ),
     'system' => array(
         'lang' => 'en', 
+		'facebook_url' => 'https://www.facebook.com/traviannews',
         'forum_url' => '',
         'social_url' => '#',
         'adminName' => 'Admin',
