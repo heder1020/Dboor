@@ -172,19 +172,23 @@ if ($this->player != NULL) {
 			';
 
 	if ($this->data['active_plus_account']) {
-		echo '<p><a href="notes.php">';
+		echo '<p>
+		<font color="#990000">Plus Account</font>
+		<a href="notes.php">';
 		echo LANGUI_GAME_MENU5;
 		echo '</a><a href="links.php">';
 		echo LANGUI_GAME_MENU6;
 		echo '</a><a href="village4.php">';
 		echo LANGUI_GAME_MENU99;
-		echo '</a></p>';
+		echo '</a>
+		<a href="crop.php">Crop Finder</a></p>';
 	}
 
 	echo '			';
 
 	if ($this->data['player_type'] == PLAYERTYPE_ADMIN) {
 		echo '<p>
+		<font color="#990000">Admin Tools</font>
             <a href="news.php">';
 		echo LANGUI_GAME_MENU7;
 		echo '</a>
