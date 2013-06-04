@@ -1,36 +1,32 @@
 <?php
-
-/**
-*
-* @   Script Name :   global.php
-* @   Author      :   NIKO28
-* @   Skype       :   nicolo3767
-* @   Project     :   DBOOR Full Decoded
-*
-**/
-
 if ( !defined( 'INSIDE' ) ) {
     die( "Hacking attempt" );
 }
-
-class GlobalModel extends ModelBase {
-	function getSiteNews() {
-		return $this->provider->fetchScalar( 'SELECT gs.news_text FROM g_summary gs' );
-	}
-
-	function setSelectedVillage($playerId, $villageId) {
-		$this->provider->executeQuery( 'UPDATE p_players p SET p.selected_village_id=%s WHERE  p.id=%s', array( $villageId, $playerId ) );
-	}
-
-	function hasVillage($playerId, $villageId) {
-		return intval( $this->provider->fetchScalar( 'SELECT v.player_id FROM p_villages v WHERE v.id=%s', array( $villageId ) ) ) == $playerId;
-	}
-
-	function getVillageData($playerId) {
-		$GameMetadata = $GLOBALS['GameMetadata'];
-		$protectionPeriod = intval( $GameMetadata['player_protection_period'] / $GameMetadata['game_speed'] );
-		$sessionTimeoutInSeconds = $GameMetadata['session_timeout'] * 60;
-		$data = $this->provider->fetchRow( 'SELECT
+class GlobalModel extends ModelBase
+{
+    function getSiteNews( )
+    {
+        return $this->provider->fetchScalar( 'SELECT gs.news_text FROM g_summary gs' );
+    }
+    function setSelectedVillage( $playerId, $villageId )
+    {
+        $this->provider->executeQuery( 'UPDATE p_players p SET p.selected_village_id=%s WHERE  p.id=%s', array(
+             $villageId,
+            $playerId 
+        ) );
+    }
+    function hasVillage( $playerId, $villageId )
+    {
+        return intval( $this->provider->fetchScalar( 'SELECT v.player_id FROM p_villages v WHERE v.id=%s', array(
+             $villageId 
+        ) ) ) == $playerId;
+    }
+    function getVillageData( $playerId )
+    {
+        $GameMetadata            = $GLOBALS['GameMetadata'];
+        $protectionPeriod        = intval( $GameMetadata['player_protection_period'] / $GameMetadata['game_speed'] );
+        $sessionTimeoutInSeconds = $GameMetadata['session_timeout'] * 60;
+        $data                    = $this->provider->fetchRow( 'SELECT
 				p.alliance_id,
 				p.alliance_name,
 				p.alliance_roles,
@@ -69,18 +65,20 @@ class GlobalModel extends ModelBase {
 				DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(p.birth_date)), \'%%Y\')+0 age,
 				TIME_TO_SEC(TIMEDIFF(NOW(), p.last_login_date)) last_login_sec
 			FROM p_players p
-			WHERE p.id=%s', array( $protectionPeriod, $protectionPeriod, $playerId ) );
-
-		if ($data == NULL) {
-			return NULL;
-		}
-
-
-		if ($sessionTimeoutInSeconds <= $data['last_login_sec']) {
-			$this->provider->executeQuery( 'UPDATE p_players p SET p.last_login_date=NOW() WHERE p.id=%s', array( $playerId ) );
-		}
-
-		$data2 = $this->provider->fetchRow( 'SELECT
+			WHERE p.id=%s', array(
+             $protectionPeriod,
+            $protectionPeriod,
+            $playerId 
+        ) );
+        if ( $data == NULL ) {
+            return NULL;
+        }
+        if ( $sessionTimeoutInSeconds <= $data['last_login_sec'] ) {
+            $this->provider->executeQuery( 'UPDATE p_players p SET p.last_login_date=NOW() WHERE p.id=%s', array(
+                 $playerId 
+            ) );
+        }
+        $data2 = $this->provider->fetchRow( 'SELECT
 				v.rel_x, v.rel_y,
 				v.parent_id, v.tribe_id,
 				v.field_maps_id,
@@ -98,29 +96,29 @@ class GlobalModel extends ModelBase {
 				v.update_key,
 				TIME_TO_SEC(TIMEDIFF(NOW(), v.last_update_date)) elapsedTimeInSeconds
 			FROM p_villages v
-			WHERE v.id=%s', array( $data['selected_village_id'] ) );
-
-		if ($data2 == NULL) {
-			return NULL;
-		}
-
-		foreach ($data2 as $k => $v) {
-			$data[$k] = $v;
-		}
-
-		unset( $data2 );
-		$row = $this->provider->fetchRow( 'SELECT g.game_over, g.game_transient_stopped FROM g_settings g' );
-		$data['gameStatus'] = intval( $row['game_over'] ) | intval( $row['game_transient_stopped'] ) << 1;
-		return $data;
-	}
-
-	function isGameOver() {
-		return intval( $this->provider->fetchScalar( 'SELECT g.game_over FROM g_settings g' ) ) == 1;
-	}
-
-	function resetNewVillageFlag($playerId) {
-		$this->provider->executeQuery( 'UPDATE p_players p SET p.create_nvil=0 WHERE p.id=%s', array( $playerId ) );
-	}
+			WHERE v.id=%s', array(
+             $data['selected_village_id'] 
+        ) );
+        if ( $data2 == NULL ) {
+            return NULL;
+        }
+        foreach ( $data2 as $k => $v ) {
+            $data[$k] = $v;
+        }
+        unset( $data2 );
+        $row                = $this->provider->fetchRow( 'SELECT g.game_over, g.game_transient_stopped FROM g_settings g' );
+        $data['gameStatus'] = intval( $row['game_over'] ) | intval( $row['game_transient_stopped'] ) << 1;
+        return $data;
+    }
+    function isGameOver( )
+    {
+        return intval( $this->provider->fetchScalar( 'SELECT g.game_over FROM g_settings g' ) ) == 1;
+    }
+    function resetNewVillageFlag( $playerId )
+    {
+        $this->provider->executeQuery( 'UPDATE p_players p SET p.create_nvil=0 WHERE p.id=%s', array(
+             $playerId 
+        ) );
+    }
 }
-
 ?>

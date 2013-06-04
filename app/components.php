@@ -1,185 +1,155 @@
 <?php
-
-/**
-*
-* @   Script Name :   components.php
-* @   Author      :   NIKO28
-* @   Skype       :   nicolo3767
-* @   Project     :   DBOOR Full Decoded
-*
-**/
-
 if ( !defined( 'INSIDE' ) ) {
     die( "Hacking attempt" );
 }
-class QueueTask {
-	var $playerId = null;
-	var $villageId = null;
-	var $toPlayerId = null;
-	var $toVillageId = null;
-	var $taskType = null;
-	var $threads = null;
-	var $executionTime = null;
-	var $procParams = null;
-	var $buildingId = null;
-	var $tag = null;
-
-	function QueueTask($taskType, $playerId, $executionTime) {
-		$this->threads = 1;
-		$this->taskType = $taskType;
-		$this->playerId = $playerId;
-		$this->executionTime = $executionTime;
-	}
-
-	function isCancelableTask($taskType) {
-		switch ($taskType) {
-		case QS_ACCOUNT_DELETE: {
-			}
-
-		case QS_BUILD_CREATEUPGRADE: {
-			}
-
-		case QS_BUILD_DROP: {
-			}
-
-		case QS_WAR_REINFORCE: {
-			}
-
-		case QS_WAR_ATTACK: {
-			}
-
-		case QS_WAR_ATTACK_PLUNDER: {
-			}
-
-		case QS_WAR_ATTACK_SPY: {
-			}
-
-		case QS_LEAVEOASIS: {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
-	}
-
-	function getMaxCancelTimeout($taskType) {
-		switch ($taskType) {
-		case QS_ACCOUNT_DELETE: {
-				return 86400;
-			}
-
-		case QS_WAR_REINFORCE: {
-			}
-
-		case QS_WAR_ATTACK: {
-			}
-
-		case QS_WAR_ATTACK_PLUNDER: {
-			}
-
-		case QS_WAR_ATTACK_SPY: {
-				return 90;
-			}
-		}
-
-		return 0 - 1;
-	}
+class QueueTask
+{
+    var $playerId = null;
+    var $villageId = null;
+    var $toPlayerId = null;
+    var $toVillageId = null;
+    var $taskType = null;
+    var $threads = null;
+    var $executionTime = null;
+    var $procParams = null;
+    var $buildingId = null;
+    var $tag = null;
+    function QueueTask( $taskType, $playerId, $executionTime )
+    {
+        $this->threads       = 1;
+        $this->taskType      = $taskType;
+        $this->playerId      = $playerId;
+        $this->executionTime = $executionTime;
+    }
+    function isCancelableTask( $taskType )
+    {
+        switch ( $taskType ) {
+            case QS_ACCOUNT_DELETE: {
+            }
+            case QS_BUILD_CREATEUPGRADE: {
+            }
+            case QS_BUILD_DROP: {
+            }
+            case QS_WAR_REINFORCE: {
+            }
+            case QS_WAR_ATTACK: {
+            }
+            case QS_WAR_ATTACK_PLUNDER: {
+            }
+            case QS_WAR_ATTACK_SPY: {
+            }
+            case QS_LEAVEOASIS: {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+    function getMaxCancelTimeout( $taskType )
+    {
+        switch ( $taskType ) {
+            case QS_ACCOUNT_DELETE: {
+                return 86400;
+            }
+            case QS_WAR_REINFORCE: {
+            }
+            case QS_WAR_ATTACK: {
+            }
+            case QS_WAR_ATTACK_PLUNDER: {
+            }
+            case QS_WAR_ATTACK_SPY: {
+                return 90;
+            }
+        }
+        return 0 - 1;
+    }
 }
-
-class ReportHelper {
-	function getReportResultRelative($result, $isAttack) {
-		if (( $result < 15 || $result == 100 )) {
-			return $result;
-		}
-
-		return intval( substr( strval( $result ), ($isAttack ? 1 : 0), 1 ) );
-	}
-
-	function getReportResultText($result) {
-		return constant( 'report_result_text' . $result );
-	}
-
-	function getReportActionText($cat) {
-		return ' ' . constant( 'report_action_text' . $cat ) . ' ';
-	}
+class ReportHelper
+{
+    function getReportResultRelative( $result, $isAttack )
+    {
+        if ( ( $result < 15 || $result == 100 ) ) {
+            return $result;
+        }
+        return intval( substr( strval( $result ), ( $isAttack ? 1 : 0 ), 1 ) );
+    }
+    function getReportResultText( $result )
+    {
+        return constant( 'report_result_text' . $result );
+    }
+    function getReportActionText( $cat )
+    {
+        return ' ' . constant( 'report_action_text' . $cat ) . ' ';
+    }
 }
-
-class Player {
-	var $prevPlayerId = null;
-	var $playerId = null;
-	var $isAgent = null;
-	var $isSpy = FALSE;
-	var $gameStatus = null;
-
-	function getKey() {
-		return md5( WebHelper::getdomain(  ) );
-	}
-
-	function getInstance() {
-		$key = Player::getkey(  );
-		return (isset( $_SESSION[$key] ) ? $_SESSION[$key] : NULL);
-	}
-
-	function save() {
-		$_SESSION[Player::getkey(  )] = $this;
-	}
-
-	function logout() {
-		$_SESSION[Player::getkey(  )] = NULL;
-		unset( $_SESSION );
-		session_destroy(  );
-	}
+class Player
+{
+    var $prevPlayerId = null;
+    var $playerId = null;
+    var $isAgent = null;
+    var $isSpy = FALSE;
+    var $gameStatus = null;
+    function getKey( )
+    {
+        return md5( WebHelper::getdomain() );
+    }
+    function getInstance( )
+    {
+        $key = Player::getkey();
+        return ( isset( $_SESSION[$key] ) ? $_SESSION[$key] : NULL );
+    }
+    function save( )
+    {
+        $_SESSION[Player::getkey()] = $this;
+    }
+    function logout( )
+    {
+        $_SESSION[Player::getkey()] = NULL;
+        unset( $_SESSION );
+        session_destroy();
+    }
 }
-
-class ClientData {
-	var $uname = null;
-	var $upwd = null;
-	var $uiLang = null;
-	var $showLevels = FALSE;
-
-	function ClientData() {
-		$this->uiLang = $GLOBALS['AppConfig']['system']['lang'];
-	}
-
-	function getInstance() {
-		$cookie = new ClientData(  );
-		$key = Player::getkey(  );
-
-		if (isset( $_COOKIE[$key] )) {
-			$obj = unserialize( base64_decode( $_COOKIE[$key] ) );
-
-			if (( $obj != NULL && is_a( $obj, 'ClientData' ) )) {
-				$cookie->uname = $obj->uname;
-				$cookie->upwd = $obj->upwd;
-			}
-		}
-
-
-		if (isset( $_COOKIE['lvl'] )) {
-			$cookie->showLevels = $_COOKIE['lvl'] == '1';
-		}
-
-
-		if (isset( $_COOKIE['lng'] )) {
-			$cookie->uiLang = ($_COOKIE['lng'] == 'ar' ? 'ar' : 'en');
-		}
-
-		return $cookie;
-	}
-
-	function save() {
-		setcookie( Player::getkey(  ), base64_encode( serialize( $this ) ), time(  ) + 5 * 12 * 30 * 24 * 3600 );
-	}
-
-	function clear() {
-		$this->uname = '';
-		$this->upwd = '';
-		setcookie( Player::getkey(  ) );
-		setcookie( 'lvl' );
-		setcookie( 'lng' );
-	}
+class ClientData
+{
+    var $uname = null;
+    var $upwd = null;
+    var $uiLang = null;
+    var $showLevels = FALSE;
+    function ClientData( )
+    {
+        $this->uiLang = $GLOBALS['AppConfig']['system']['lang'];
+    }
+    function getInstance( )
+    {
+        $cookie = new ClientData();
+        $key    = Player::getkey();
+        if ( isset( $_COOKIE[$key] ) ) {
+            $obj = unserialize( base64_decode( $_COOKIE[$key] ) );
+            if ( ( $obj != NULL && is_a( $obj, 'ClientData' ) ) ) {
+                $cookie->uname = $obj->uname;
+                $cookie->upwd  = $obj->upwd;
+            }
+        }
+        if ( isset( $_COOKIE['lvl'] ) ) {
+            $cookie->showLevels = $_COOKIE['lvl'] == '1';
+        }
+        if ( isset( $_COOKIE['lng'] ) ) {
+            $cookie->uiLang = ( $_COOKIE['lng'] == 'ar' ? 'ar' : 'en' );
+        }
+        return $cookie;
+    }
+    function save( )
+    {
+        setcookie( Player::getkey(), base64_encode( serialize( $this ) ), time() + 5 * 12 * 30 * 24 * 3600 );
+    }
+    function clear( )
+    {
+        $this->uname = '';
+        $this->upwd  = '';
+        setcookie( Player::getkey() );
+        setcookie( 'lvl' );
+        setcookie( 'lng' );
+    }
 }
-
 define( 'PLAYERTYPE_NORMAL', 1 );
 define( 'PLAYERTYPE_ADMIN', 2 );
 define( 'PLAYERTYPE_TATAR', 3 );

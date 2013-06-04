@@ -1,29 +1,18 @@
 <?php
-
-/**
-*
-* @   Script Name :   battle.php
-* @   Author      :   NIKO28
-* @   Skype       :   nicolo3767
-* @   Project     :   DBOOR Full Decoded
-*
-**/
-
 if ( !defined( 'INSIDE' ) ) {
     die( "Hacking attempt" );
 }
-
 class BattleModel extends ModelBase
 {
     function executeWarResult( $taskRow )
     {
         global $GameMetadata;
-        $taskRow[ 'village_id' ] = intval( $taskRow[ 'village_id' ] );
-        $fromVillageRow          = $this->_getVillageInfo( $taskRow[ 'village_id' ] );
-        $toVillageRow            = $this->_getVillageInfo( $taskRow[ 'to_village_id' ] );
-        $paramsArray             = explode( '|', $taskRow[ 'proc_params' ] );
-        $troopsArrStr            = explode( ',', $paramsArray[ 0 ] );
-        $troopsArray             = array(
+        $taskRow['village_id'] = intval( $taskRow['village_id'] );
+        $fromVillageRow        = $this->_getVillageInfo( $taskRow['village_id'] );
+        $toVillageRow          = $this->_getVillageInfo( $taskRow['to_village_id'] );
+        $paramsArray           = explode( '|', $taskRow['proc_params'] );
+        $troopsArrStr          = explode( ',', $paramsArray[0] );
+        $troopsArray           = array(
              'troops' => array( ),
             'onlyHero' => FALSE,
             'heroTroopId' => 0,
@@ -32,52 +21,52 @@ class BattleModel extends ModelBase
             'hasWallDest' => FALSE,
             'cropConsumption' => 0 
         );
-        $_onlyHero               = TRUE;
+        $_onlyHero             = TRUE;
         foreach ( $troopsArrStr as $_t ) {
             list( $tid, $tnum ) = explode( ' ', $_t );
             if ( $tnum == -1 ) {
-                $troopsArray[ 'hasHero' ]     = TRUE;
-                $troopsArray[ 'heroTroopId' ] = $tid;
-                $tnum                         = 1;
+                $troopsArray['hasHero']     = TRUE;
+                $troopsArray['heroTroopId'] = $tid;
+                $tnum                       = 1;
             } else {
-                $troopsArray[ 'troops' ][ $tid ] = $tnum;
+                $troopsArray['troops'][$tid] = $tnum;
                 if ( $tnum > 0 ) {
                     $_onlyHero = FALSE;
                 } else {
                     continue;
                 }
                 if ( $tid == 9 || $tid == 19 || $tid == 29 ) {
-                    $troopsArray[ 'hasKing' ] = TRUE;
+                    $troopsArray['hasKing'] = TRUE;
                 }
                 if ( $tid == 7 || $tid == 17 || $tid == 27 ) {
-                    $troopsArray[ 'hasWallDest' ] = TRUE;
+                    $troopsArray['hasWallDest'] = TRUE;
                 }
             }
-            $troopsArray[ 'cropConsumption' ] += $GameMetadata[ 'troops' ][ $tid ][ 'crop_consumption' ] * $tnum;
+            $troopsArray['cropConsumption'] += $GameMetadata['troops'][$tid]['crop_consumption'] * $tnum;
         }
-        if ( $_onlyHero && $troopsArray[ 'hasHero' ] ) {
-            $troopsArray[ 'onlyHero' ] = TRUE;
+        if ( $_onlyHero && $troopsArray['hasHero'] ) {
+            $troopsArray['onlyHero'] = TRUE;
         }
         $procInfo = array(
              'troopsArray' => $troopsArray,
-            'hasHero' => $paramsArray[ 1 ] == 1,
-            'spyAction' => $paramsArray[ 2 ],
-            'catapultTarget' => $paramsArray[ 3 ],
-            'harvestResources' => $paramsArray[ 4 ],
-            'spyInfo' => $paramsArray[ 5 ],
-            'catapultResult' => $paramsArray[ 6 ],
-            'troopBack' => $paramsArray[ 7 ] == 1 
+            'hasHero' => $paramsArray[1] == 1,
+            'spyAction' => $paramsArray[2],
+            'catapultTarget' => $paramsArray[3],
+            'harvestResources' => $paramsArray[4],
+            'spyInfo' => $paramsArray[5],
+            'catapultResult' => $paramsArray[6],
+            'troopBack' => $paramsArray[7] == 1 
         );
-        if ( $taskRow[ 'proc_type' ] == QS_CREATEVILLAGE ) {
-            if ( $toVillageRow[ 'is_oasis' ] || intval( $toVillageRow[ 'player_id' ] ) > 0 ) {
-                $taskRow[ 'proc_type' ] = QS_WAR_ATTACK_PLUNDER;
+        if ( $taskRow['proc_type'] == QS_CREATEVILLAGE ) {
+            if ( $toVillageRow['is_oasis'] || intval( $toVillageRow['player_id'] ) > 0 ) {
+                $taskRow['proc_type'] = QS_WAR_ATTACK_PLUNDER;
             }
         }
-        switch ( $taskRow[ 'proc_type' ] ) {
+        switch ( $taskRow['proc_type'] ) {
             case QS_WAR_REINFORCE:
                 require_once( MODEL_PATH . DIRECTORY_SEPARATOR . 'battles' . DIRECTORY_SEPARATOR . 'reinforcement.php' );
                 $reinforceModel = new ReInforcementBattleModel();
-                return $reinforceModel->handleReInforcement( $taskRow, $toVillageRow, $fromVillageRow, $procInfo, $paramsArray[ 0 ] );
+                return $reinforceModel->handleReInforcement( $taskRow, $toVillageRow, $fromVillageRow, $procInfo, $paramsArray[0] );
             case QS_WAR_ATTACK:
             case QS_WAR_ATTACK_PLUNDER:
                 require_once( MODEL_PATH . DIRECTORY_SEPARATOR . 'battles' . DIRECTORY_SEPARATOR . 'war.php' );
@@ -90,7 +79,7 @@ class BattleModel extends ModelBase
             case QS_CREATEVILLAGE:
                 require_once( MODEL_PATH . DIRECTORY_SEPARATOR . 'battles' . DIRECTORY_SEPARATOR . 'createnewvillage.php' );
                 $newVillageModel = new NewVillageBattleModel();
-                return $newVillageModel->handleCreateNewVillage( $taskRow, $toVillageRow, $fromVillageRow, $troopsArray[ 'cropConsumption' ] );
+                return $newVillageModel->handleCreateNewVillage( $taskRow, $toVillageRow, $fromVillageRow, $troopsArray['cropConsumption'] );
         }
         return TRUE;
     }
@@ -107,36 +96,36 @@ class BattleModel extends ModelBase
             'total_carry_load' => 0,
             'total_dead_consumption' => 0,
             'total_dead_number' => 0,
-            'hasHero' => ( $heroLevel[ 'heroTroopId' ] > -1 ),
-            'heroTroopId' => $heroLevel[ 'heroTroopId' ],
+            'hasHero' => ( $heroLevel['heroTroopId'] > -1 ),
+            'heroTroopId' => $heroLevel['heroTroopId'],
             'heroLevel' => $heroLevel 
         );
         foreach ( $troops as $tid => $tnum ) {
             $num = intval( $tnum ) > 0 ? intval( $tnum ) : 0;
             if ( $tid != 99 ) {
-                $addPower = ( isset( $troopsPower[ $tid ] ) ) ? ( $troopsPower[ $tid ] ) : 0;
+                $addPower = ( isset( $troopsPower[$tid] ) ) ? ( $troopsPower[$tid] ) : 0;
                 if ( $spyAction ) {
                     if ( $isAttacking ) {
                         if ( $tid == 4 || $tid == 14 || $tid == 23 ) {
-                            $returnTroops[ 'total_spy_power' ] += ( $num ) * ( 35 + $addPower );
+                            $returnTroops['total_spy_power'] += ( $num ) * ( 35 + $addPower );
                         }
                     }
                     if ( !$isAttacking ) {
                         if ( $tid == 4 || $tid == 14 || $tid == 23 || $tid == 44 ) {
-                            $returnTroops[ 'total_spy_power' ] += ( $num ) * ( 20 + $addPower );
+                            $returnTroops['total_spy_power'] += ( $num ) * ( 20 + $addPower );
                         }
                     }
                 }
-                $returnTroops[ 'total_live_number' ] += $num;
-                $returnTroops[ 'cavalry_power' ] += $isAttacking ? ( $GameMetadata[ 'troops' ][ $tid ][ 'is_cavalry' ] ? ( $num * ( $GameMetadata[ 'troops' ][ $tid ][ 'attack_value' ] + $addPower ) ) : 0 ) : ( $num * ( $GameMetadata[ 'troops' ][ $tid ][ 'defense_cavalry' ] + $addPower ) );
-                $returnTroops[ 'infantry_power' ] += $isAttacking ? ( !$GameMetadata[ 'troops' ][ $tid ][ 'is_cavalry' ] ? ( $num * ( $GameMetadata[ 'troops' ][ $tid ][ 'attack_value' ] + $addPower ) ) : 0 ) : ( $num * ( $GameMetadata[ 'troops' ][ $tid ][ 'defense_infantry' ] + $addPower ) );
-                $returnTroops[ 'total_carry_load' ] += $num * $GameMetadata[ 'troops' ][ $tid ][ 'carry_load' ];
+                $returnTroops['total_live_number'] += $num;
+                $returnTroops['cavalry_power'] += $isAttacking ? ( $GameMetadata['troops'][$tid]['is_cavalry'] ? ( $num * ( $GameMetadata['troops'][$tid]['attack_value'] + $addPower ) ) : 0 ) : ( $num * ( $GameMetadata['troops'][$tid]['defense_cavalry'] + $addPower ) );
+                $returnTroops['infantry_power'] += $isAttacking ? ( !$GameMetadata['troops'][$tid]['is_cavalry'] ? ( $num * ( $GameMetadata['troops'][$tid]['attack_value'] + $addPower ) ) : 0 ) : ( $num * ( $GameMetadata['troops'][$tid]['defense_infantry'] + $addPower ) );
+                $returnTroops['total_carry_load'] += $num * $GameMetadata['troops'][$tid]['carry_load'];
             }
-            $returnTroops[ 'troops' ][ $tid ] = array(
+            $returnTroops['troops'][$tid] = array(
                  'number' => $num,
                 'live_number' => $num,
-                'single_consumption' => $GameMetadata[ 'troops' ][ $tid ][ 'crop_consumption' ],
-                'single_carry_load' => $GameMetadata[ 'troops' ][ $tid ][ 'carry_load' ] 
+                'single_consumption' => $GameMetadata['troops'][$tid]['crop_consumption'],
+                'single_carry_load' => $GameMetadata['troops'][$tid]['carry_load'] 
             );
         }
         return $returnTroops;
@@ -152,7 +141,7 @@ class BattleModel extends ModelBase
                 $_c++;
                 list( $troopId, $researches_done, $defense_level, $attack_level ) = explode( ' ', $troopStr );
                 if ( $troopId != 99 && $_c <= 8 ) {
-                    $troopsPower[ $troopId ] = $attack_level;
+                    $troopsPower[$troopId] = $attack_level;
                 }
             }
         }
@@ -173,23 +162,23 @@ class BattleModel extends ModelBase
         if ( $vrow != NULL ) {
             if ( $hasHero ) {
                 $_row = $this->provider->fetchRow( 'SELECT p.hero_att, p.hero_deff, p.hero_troop_id FROM p_players p WHERE p.id=%s', array(
-                     intval( $vrow[ 'player_id' ] ) 
+                     intval( $vrow['player_id'] ) 
                 ) );
                 if ( $_row != NULL ) {
-                    $heroLevel[ 'att' ]         = intval( $_row[ 'hero_att' ] );
-                    $heroLevel[ 'deff' ]        = intval( $_row[ 'hero_deff' ] );
-                    $heroLevel[ 'heroTroopId' ] = intval( $_row[ 'hero_troop_id' ] );
+                    $heroLevel['att']         = intval( $_row['hero_att'] );
+                    $heroLevel['deff']        = intval( $_row['hero_deff'] );
+                    $heroLevel['heroTroopId'] = intval( $_row['hero_troop_id'] );
                 }
             }
             $_c                = 0;
-            $troopsTrainingStr = trim( $vrow[ 'troops_training' ] );
+            $troopsTrainingStr = trim( $vrow['troops_training'] );
             if ( $troopsTrainingStr != '' ) {
                 $_arr = explode( ',', $troopsTrainingStr );
                 foreach ( $_arr as $troopStr ) {
                     $_c++;
                     list( $troopId, $researches_done, $defense_level, $attack_level ) = explode( ' ', $troopStr );
                     if ( $troopId != 99 && $_c <= 8 ) {
-                        $troopsPower[ $troopId ] = $defense_level;
+                        $troopsPower[$troopId] = $defense_level;
                     }
                 }
             }
@@ -199,10 +188,10 @@ class BattleModel extends ModelBase
     function _getNewTroops( $troopsStr, $addTroopsArray, $fromVillageId, $isSamePlayer )
     {
         $newTroopsStr = '';
-        $heroAddCond  = $addTroopsArray[ 'hasHero' ] && $fromVillageId > -1 && !$isSamePlayer;
+        $heroAddCond  = $addTroopsArray['hasHero'] && $fromVillageId > -1 && !$isSamePlayer;
         $troopsStr    = trim( $troopsStr );
         if ( $troopsStr == '' ) {
-            foreach ( $addTroopsArray[ 'troops' ] as $tid => $tnum ) {
+            foreach ( $addTroopsArray['troops'] as $tid => $tnum ) {
                 if ( $newTroopsStr != '' ) {
                     $newTroopsStr .= ',';
                 }
@@ -212,7 +201,7 @@ class BattleModel extends ModelBase
                 if ( $newTroopsStr != '' ) {
                     $newTroopsStr .= ',';
                 }
-                $newTroopsStr .= $addTroopsArray[ 'heroTroopId' ] . ' -1';
+                $newTroopsStr .= $addTroopsArray['heroTroopId'] . ' -1';
             }
             $newTroopsStr = $fromVillageId . ':' . $newTroopsStr;
         } else {
@@ -230,37 +219,37 @@ class BattleModel extends ModelBase
                     foreach ( $curTroopsStr as $curTroopsStrItem ) {
                         list( $_tid, $_tnum ) = explode( ' ', $curTroopsStrItem );
                         if ( $_tnum == -1 ) {
-                            $curTroops[ -1 ] = $_tid;
+                            $curTroops[-1] = $_tid;
                         } else {
-                            $curTroops[ $_tid ] = $_tnum;
+                            $curTroops[$_tid] = $_tnum;
                         }
                     }
                     $newtvStr = '';
-                    foreach ( $addTroopsArray[ 'troops' ] as $tid => $tnum ) {
+                    foreach ( $addTroopsArray['troops'] as $tid => $tnum ) {
                         if ( $newtvStr != '' ) {
                             $newtvStr .= ',';
                         }
-                        if ( isset( $curTroops[ $tid ] ) ) {
-                            $tnum += $curTroops[ $tid ];
+                        if ( isset( $curTroops[$tid] ) ) {
+                            $tnum += $curTroops[$tid];
                         }
                         $newtvStr .= $tid . ' ' . $tnum;
                     }
-                    if ( isset( $curTroops[ 99 ] ) ) {
+                    if ( isset( $curTroops[99] ) ) {
                         if ( $newtvStr != '' ) {
                             $newtvStr .= ',';
                         }
-                        $newtvStr .= '99 ' . $curTroops[ 99 ];
+                        $newtvStr .= '99 ' . $curTroops[99];
                     }
-                    if ( isset( $curTroops[ -1 ] ) ) {
+                    if ( isset( $curTroops[-1] ) ) {
                         if ( $newtvStr != '' ) {
                             $newtvStr .= ',';
                         }
-                        $newtvStr .= $curTroops[ -1 ] . ' -1';
+                        $newtvStr .= $curTroops[-1] . ' -1';
                     } else if ( $heroAddCond ) {
                         if ( $newtvStr != '' ) {
                             $newtvStr .= ',';
                         }
-                        $newtvStr .= $addTroopsArray[ 'heroTroopId' ] . ' -1';
+                        $newtvStr .= $addTroopsArray['heroTroopId'] . ' -1';
                     }
                     $newTroopsStr .= $vid . ':' . $newtvStr;
                 } else {
@@ -269,7 +258,7 @@ class BattleModel extends ModelBase
             }
             if ( !$hasTroopsIn ) {
                 $newTroopsStr = '';
-                foreach ( $addTroopsArray[ 'troops' ] as $tid => $tnum ) {
+                foreach ( $addTroopsArray['troops'] as $tid => $tnum ) {
                     if ( $newTroopsStr != '' ) {
                         $newTroopsStr .= ',';
                     }
@@ -279,7 +268,7 @@ class BattleModel extends ModelBase
                     if ( $newTroopsStr != '' ) {
                         $newTroopsStr .= ',';
                     }
-                    $newTroopsStr .= $addTroopsArray[ 'heroTroopId' ] . ' -1';
+                    $newTroopsStr .= $addTroopsArray['heroTroopId'] . ' -1';
                 }
                 $newTroopsStr = $fromVillageId . ':' . $newTroopsStr;
                 if ( $troopsStr != '' ) {
@@ -300,9 +289,9 @@ class BattleModel extends ModelBase
             if ( $row == NULL ) {
                 return;
             }
-            $pid            = $row[ 'player_id' ];
+            $pid            = $row['player_id'];
             $troops_out_num = '';
-            $ts             = trim( $row[ 'troops_out_num' ] );
+            $ts             = trim( $row['troops_out_num'] );
             if ( $ts != '' ) {
                 $tsArr = explode( '|', $ts );
                 foreach ( $tsArr as $tsArrStr ) {
@@ -335,33 +324,33 @@ class BattleModel extends ModelBase
     }
     function _updateVillage( $villageRow, $reduceCropConsumption, $heroKilled )
     {
-        $elapsedTimeInSeconds = $villageRow[ 'elapsedTimeInSeconds' ];
+        $elapsedTimeInSeconds = $villageRow['elapsedTimeInSeconds'];
         $resources            = array( );
-        $r_arr                = explode( ',', $villageRow[ 'resources' ] );
+        $r_arr                = explode( ',', $villageRow['resources'] );
         foreach ( $r_arr as $r_str ) {
             $r2            = explode( ' ', $r_str );
-            $prate         = floor( $r2[ 4 ] * ( 1 + $r2[ 5 ] / 100 ) ) - ( ( $r2[ 0 ] == 4 ) ? $villageRow[ 'crop_consumption' ] : 0 );
-            $current_value = floor( $r2[ 1 ] + $elapsedTimeInSeconds * ( $prate / 3600 ) );
-            if ( $current_value > $r2[ 2 ] ) {
-                $current_value = $r2[ 2 ];
+            $prate         = floor( $r2[4] * ( 1 + $r2[5] / 100 ) ) - ( ( $r2[0] == 4 ) ? $villageRow['crop_consumption'] : 0 );
+            $current_value = floor( $r2[1] + $elapsedTimeInSeconds * ( $prate / 3600 ) );
+            if ( $current_value > $r2[2] ) {
+                $current_value = $r2[2];
             }
-            $resources[ $r2[ 0 ] ] = array(
+            $resources[$r2[0]] = array(
                  'current_value' => $current_value,
-                'store_max_limit' => $r2[ 2 ],
-                'store_init_limit' => $r2[ 3 ],
-                'prod_rate' => $r2[ 4 ],
-                'prod_rate_percentage' => $r2[ 5 ],
+                'store_max_limit' => $r2[2],
+                'store_init_limit' => $r2[3],
+                'prod_rate' => $r2[4],
+                'prod_rate_percentage' => $r2[5],
                 'calc_prod_rate' => $prate 
             );
         }
-        list( $cpValue, $cpRate ) = explode( ' ', $villageRow[ 'cp' ] );
+        list( $cpValue, $cpRate ) = explode( ' ', $villageRow['cp'] );
         $cpValue      = round( $cpValue + $elapsedTimeInSeconds * ( $cpRate / 86400 ), 4 );
         $resourcesStr = '';
         foreach ( $resources as $k => $v ) {
             if ( $resourcesStr != '' ) {
                 $resourcesStr .= ',';
             }
-            $resourcesStr .= sprintf( '%s %s %s %s %s %s', $k, $v[ 'current_value' ], $v[ 'store_max_limit' ], $v[ 'store_init_limit' ], $v[ 'prod_rate' ], $v[ 'prod_rate_percentage' ] );
+            $resourcesStr .= sprintf( '%s %s %s %s %s %s', $k, $v['current_value'], $v['store_max_limit'], $v['store_init_limit'], $v['prod_rate'], $v['prod_rate_percentage'] );
         }
         $cp = $cpValue . ' ' . $cpRate;
         $this->provider->executeQuery( 'UPDATE p_villages v 
@@ -375,11 +364,11 @@ class BattleModel extends ModelBase
              $resourcesStr,
             $cp,
             $reduceCropConsumption,
-            intval( $villageRow[ 'id' ] ) 
+            intval( $villageRow['id'] ) 
         ) );
         if ( $heroKilled ) {
             $this->provider->executeQuery( 'UPDATE p_players p SET p.hero_isKilled=1, p.hero_in_village_id=NULL WHERE p.id=%s', array(
-                 intval( $villageRow[ 'player_id' ] ) 
+                 intval( $villageRow['player_id'] ) 
             ) );
         }
     }
