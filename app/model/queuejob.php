@@ -24,18 +24,6 @@ class QueueJobModel extends ModelBase
         
         if ( $mutex->lock() ) {
             $this->processTaskQueue();
-            
-            if ( date( 'w' ) == 5 ) {
-                $row = $this->provider->fetchRow( 'SELECT gs.cur_week w1, CEIL((TO_DAYS(NOW())-TO_DAYS(gs.start_date))/7) w2 FROM g_settings gs' );
-                
-                if ( $row[ 'w1' ] < $row[ 'w2' ] ) {
-                    $this->provider->executeQuery( 'UPDATE g_settings gs SET gs.cur_week=%s', array(
-                         intval( $row[ 'w2' ] ) 
-                    ) );
-                    $this->setWeeklyMedals( intval( $row[ 'w2' ] ) );
-                }
-            }
-			
 			$this->check_theme_footer();
             $mutex->release();
         }
