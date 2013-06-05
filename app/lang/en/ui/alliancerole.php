@@ -7,14 +7,14 @@
 /*                   */
 /*********************/
 
-define( "LANGUI_ALLIROL_T1", "The distribution of positions" );
-define( "LANGUI_ALLIROL_T2", "Name" );
-define( "LANGUI_ALLIROL_T3", "Position" );
-define( "LANGUI_ALLIROL_T4", "give rights" );
-define( "LANGUI_ALLIROL_T5", "the distribution of positions" );
-define( "LANGUI_ALLIROL_T6", "remove the player" );
-define( "LANGUI_ALLIROL_T7", "change the description of the coalition" );
-define( "LANGUI_ALLIROL_T8", "alliance diplomacy" );
-define( "LANGUI_ALLIROL_T9", "send a message to all the Alliance" );
-define( "LANGUI_ALLIROL_T10", "invite players to the alliance" );
+define( "LANGUI_ALLIROL_T1", "La distribuzione delle posizioni" );
+define( "LANGUI_ALLIROL_T2", "Nome" );
+define( "LANGUI_ALLIROL_T3", "Posizione" );
+define( "LANGUI_ALLIROL_T4", "Assegna diritti" );
+define( "LANGUI_ALLIROL_T5", "La distribuzione delle posizioni" );
+define( "LANGUI_ALLIROL_T6", "Rimuovere il giocatore" );
+define( "LANGUI_ALLIROL_T7", "Modifica la descrizione dell'alleanza" );
+define( "LANGUI_ALLIROL_T8", "Diplomazia alleanza" );
+define( "LANGUI_ALLIROL_T9", "Invia un messaggio a tutta l'alleanza" );
+define( "LANGUI_ALLIROL_T10", "Invita giocatori nell'alleanza" );
 ?>
