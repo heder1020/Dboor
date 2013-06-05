@@ -284,6 +284,7 @@ document.body.appendChild(layer);
 				</table>
 			</td>
 			<td class="desc1"><div>';
+	if( $this->profileData['avatar'] != "no-avatar.jpg" )
 	echo '<img src="/avatar/'.$this->profileData['avatar'].'" alt=" Avatar" style ="max-heigt:290px; max-width:250px";>';
 	echo $this->getProfileDescription( $this->profileData['description1'] );
 	echo '</div></td>
