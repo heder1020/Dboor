@@ -150,7 +150,7 @@ if ($this->selectedTabIndex == 0) {
 <table id="distribution" cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th colspan="2">';
+			<th colspan="3">';
 	echo $this->data['hero_name'];
 	echo ' ';
 	echo level_lang;
@@ -164,19 +164,39 @@ if ($this->selectedTabIndex == 0) {
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<th>';
-	echo LANGUI_CUSTBU_HRO_p1_t4;
-	echo ':</th>
-			<td class="val">';
-	echo $this->data['hero_points'];
-	echo '</td>
-		</tr>
+	<tr>
+		<th>Attacco:</th>
+		<td class="xp"><img class="bar" src="img/x.gif" style="width:'.$this->data['hero_att'].'%;" 
+						alt="'.$this->data['hero_att'].'" title="'.$this->data['hero_att'].'" /></td> 
+        <td class="up"><span class="none">';
+        if($this->data['hero_points'] > 0 && $this->data['hero_att'] < 100){ 
+            echo "<a href=\"\">(<b>+</b>)</a>"; 
+        }else { 
+            echo "<span class=\"none\">(+)</span>"; 
+        } 
+     echo' </td> 
+	</tr>
+	<tr>
+		<th>Difesa:</th>
+		<td class="xp"><img class="bar" src="img/x.gif" style="width:'.$this->data['hero_def'].'%;" 
+						alt="'.$this->data['hero_def'].'" title="'.$this->data['hero_def'].'" /></td> 
+        <td class="up"><span class="none">';
+        if($this->data['hero_points'] > 0 && $this->data['hero_def'] < 100){ 
+            echo "<a href=\"\">(<b>+</b>)</a>"; 
+        }else { 
+            echo "<span class=\"none\">(+)</span>"; 
+        } 
+     echo' </td> 
+	</tr>
+	<tr>
+		<th>Punti:</th>
+		<td class="val" colspan="2">'.$this->data['hero_points'].'</td>
+	</tr>
 		<tr>
 			<th>';
 	echo LANGUI_CUSTBU_HRO_p1_t5;
 	echo ':</th>
-			<td class="val"><input tabindex="6" type="text" name="hname" value="';
+			<td class="val" colspan="2"><input tabindex="6" type="text" name="hname" value="';
 	echo htmlspecialchars( $this->data['hero_name'] );
 	echo '" maxlength="20" class="text"></td>
 		</tr>
