@@ -49,6 +49,7 @@ echo '" type="text/javascript"></script>';
   js.src = "//connect.facebook.net/it_IT/all.js#xfbml=1";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+<script src="assets/countdown.js"></script>
 <?php
 echo'
 	</head>
@@ -118,7 +119,20 @@ echo'
 					
                         <div class="trv_image_carousel">
                         
-                            <div class="clearfix"><div class="register"><a href="register.php"></div>
+                            <div class="clearfix"><script>
+var test1 = new Countdown({
+    year	: 2014, 
+    month	: 1, 
+    day	 : 1, 
+    hour	: 0,
+    minute	: 0, 
+    second	: 0,
+	width:450, 
+	height:83,  
+	rangeHi:"day",
+	style:"flip"		 // < - no comma on last item!!
+});
+</script></div>
                     
                         </div>
                     </div>
