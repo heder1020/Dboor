@@ -22,7 +22,6 @@ header( "Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . " GMT" );
 require( APP_PATH . "config.php" );
 $link = mysql_connect( $AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'] ) or die( mysql_error() );
 mysql_select_db( $AppConfig['db']['database'], $link ) or die( mysql_error() );
-mysql_query( "update `p_players` set `is_active` = 1;" );
 require( LIB_PATH . "webservice.php" );
 require( LIB_PATH . "widget.php" );
 require( LIB_PATH . "webhelper.php" );
