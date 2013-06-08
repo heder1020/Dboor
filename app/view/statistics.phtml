@@ -253,13 +253,18 @@ function setGold(id) {
 		echo $rank;
 		echo '.</td>';
 		$lastLogin = $this->dataList->row['last_login_date'];
-		$lastLogin = explode(" ", $lastLogin);
-		$lastLoginDate = explode("-", $lastLogin[0]);
-		$lastLoginHour = explode(":", $lastLogin[1]);
-		$lastLogin = mktime($lastLoginHour[0], $lastLoginHour[1], $lastLoginHour[2], $lastLoginDate[1], $lastLoginDate[2], $lastLoginDate[0]);
-		$lastLogin -= time();
-		$lastLogin *= -1;
-		echo '<td>'.$this->getOnlineStatus($lastLogin,$this->dataList->row['last_login_date']).'</td>';
+		if(isset($lastLogin)){
+			$lastLogin = explode(" ", $lastLogin);
+			$lastLoginDate = explode("-", $lastLogin[0]);
+			$lastLoginHour = explode(":", $lastLogin[1]);
+			$lastLogin = mktime($lastLoginHour[0], $lastLoginHour[1], $lastLoginHour[2], $lastLoginDate[1], $lastLoginDate[2], 
+								$lastLoginDate[0]);
+			$lastLogin -= time();
+			$lastLogin *= -1;
+			echo '<td>'.$this->getOnlineStatus($lastLogin,$this->dataList->row['last_login_date']).'</td>';
+		} else {
+			echo '<td><img class="online5" src="assets/x.gif" title="Inattivo" alt="Inattivo"></td>';
+		}
 		
 		echo '<td> <a href="msg.php?uid='.$this->dataList->row['id'].'"><img src="/assets/default/img/msg/messageStatus.gif" title="Send Message"></a></td>
 		    <td class="pla"><a href="profile.php?uid=';

@@ -58,7 +58,8 @@ class StatisticsModel extends ModelBase {
 					p.villages_count
 				FROM p_players p
 				WHERE
-					p.player_type!=%s
+					p.player_type!=%s AND
+					p.is_active = 1
 				ORDER BY
 					(p.total_people_count*10+p.villages_count) DESC, p.id ASC
 				LIMIT %s,%s', array( PLAYERTYPE_TATAR, $pageIndex * $pageSize, $pageSize ) ) : $this->provider->fetchResultSet( 'SELECT
@@ -74,7 +75,7 @@ class StatisticsModel extends ModelBase {
 					p.villages_count
 				FROM p_players p
 				WHERE
-					p.player_type!=%s AND p.tribe_id=%s
+					p.player_type!=%s AND p.tribe_id=%s AND p.is_active = 1
 				ORDER BY
 					(p.total_people_count*10+p.villages_count) DESC, p.id ASC
 				LIMIT %s,%s', array( PLAYERTYPE_TATAR, $tribeId, $pageIndex * $pageSize, $pageSize ) ));
