@@ -34,7 +34,7 @@ class GPage extends ProcessVillagePage
                     continue;
                 }
                 if ( isset( $this->troops[$tid] ) ) {
-                    $this->troops += $tid = $tnum;
+                    $this->troops[$tid] += $tnum;
                     continue;
                 }
                 $this->troops[$tid] = $tnum;
