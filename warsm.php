@@ -69,7 +69,7 @@ class GPage extends SecureGamePage
             $attackTroops      = $m->_getTroopWithPower( $troops, $troopsPower, TRUE, $heroLevel, $peopleCount, $wringerPower, 0 );
             $peopleCount       = ( isset( $_POST['ew2'] ) ? intval( $_POST['ew2'] ) : 0 );
             $wallLevel         = ( isset( $_POST['wall1'] ) ? intval( $_POST['wall1'] ) : 0 );
-            $totalDefensePower = 0;
+            $totalDefensePower = array( );
             $defenseTroops     = array( );
             foreach ( $_POST['t2'] as $tribeId => $troopArray ) {
                 $troops      = array( );
@@ -79,9 +79,10 @@ class GPage extends SecureGamePage
                     $troopsPower[$tid] = ( ( ( isset( $_POST['f2'] ) && isset( $_POST['f2'][$tribeId] ) ) && isset( $_POST['f2'][$tribeId][$tid] ) ) ? intval( $_POST['f2'][$tribeId][$tid] ) : 0 );
                 }
                 $defenseTroops[$tribeId] = $m->_getTroopWithPower( $troops, $troopsPower, FALSE, 0, $peopleCount, 0, $wallLevel );
-                $totalDefensePower += $defenseTroops[$tribeId]['total_power'];
+                $totalDefensePower['cavalry_power'] = $defenseTroops[$tribeId]['cavalry_power'];
+				$totalDefensePower['infantry_power'] = $defenseTroops[$tribeId]['infantry_power'];
             }
-            $this->warResult = $m->getWarResult( $attackTroops, $defenseTroops, $totalDefensePower, ( isset( $_POST['ktyp'] ) && intval( $_POST['ktyp'] ) == 2 ) );
+            $this->warResult = $m->getWarResult( $attackTroops, $defenseTroops, $totalDefensePower, $wallLevel, 0,( isset( $_POST['ktyp'] ) && intval( $_POST['ktyp'] ) == 2 ), FALSE );
             $m->dispose();
         }
     }
