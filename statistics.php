@@ -7,7 +7,7 @@ class GPage extends SecureGamePage
     var $selectedTabIndex = null;
     var $selectedRank = null;
     var $dataList = null;
-    var $pageSize = 20;
+    var $pageSize = 30;
     var $pageCount = null;
     var $pageIndex = null;
     var $generalData = null;
