@@ -6,8 +6,10 @@ class CleanDatabase extends ModelBase
 {
     function clean( )
     {
-        $this->provider->executeQuery( "DELETE FROM `p_msgs` WHERE is_readed = 1" );
-        $this->provider->executeQuery( "DELETE FROM `p_rpts` WHERE read_status >= 2" );
+        $this->provider->executeQuery( "DELETE FROM `p_msgs` WHERE is_readed = 1 OR
+										UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(creation_date)>172800" );
+        $this->provider->executeQuery( "DELETE FROM `p_rpts` WHERE read_status >= 2 OR
+										UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(creation_date)>172800" );
         $this->provider->executeQuery( "DELETE FROM `g_chat`" );
 		$this->deleteInactive();
 		$this->updateCounter();
