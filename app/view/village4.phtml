@@ -300,12 +300,26 @@ WHERE v.player_id = $id AND v.is_oasis = 0 ORDER BY v.village_name ASC
 }
 if ( $this->selectedTabIndex == 4 ) {
 	$pid  = $this->player->playerId;
+	$kind = mysql_query("SELECT * FROM p_villages WHERE player_id = $pid LIMIT 0 , 1");		
+	while ( $riga = mysql_fetch_array( $kind )) {
+		$tipo = $riga['troops_num'];
+		$tipo = explode("-1:",$tipo);
+		$tipo = explode(" ", $tipo[1]);
+		$tipo = $tipo[0];
+	}
 ?>
 <table id="troops" cellpadding="1" cellspacing="1">
 	<thead>
     <tr><th colspan="12">Own troops</th></tr>
     <tr>
-		<td>Village</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td><td>u1</td>
+		<td>Village</td>
+        <?php
+		for($i = $tipo; $i < $tipo+10; $i++) {
+			echo '<td><img src="assets/x.gif" class="unit u'.$i.'" title="'.constant( 'troop_'.$i).'" alt="'.constant( 'troop_' 
+				. $i ).'"></td>';
+		}
+		echo '<td><img src="assets/x.gif" class="unit uhero" title="Eroe" alt="Eroe"></td>';
+		?>
         </tr></thead><tbody>
 		<?php
 		$villi = mysql_query("SELECT * FROM p_villages WHERE player_id = $pid");		
