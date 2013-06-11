@@ -264,6 +264,16 @@ class BuildModel extends ModelBase
             $playerId 
         ) );
     }
+	function addHeroAtt( $playerId )
+    {
+        $this->provider->executeQuery( 'UPDATE p_players p SET p.hero_att = p.hero_att+1 WHERE p.id=%s', array( $playerId ) );
+		$this->provider->executeQuery( 'UPDATE p_players p SET p.hero_up_point =p.hero_up_point-1 WHERE p.id=%s',array($playerId ) );
+    }
+	function addHeroDef( $playerId )
+    {
+        $this->provider->executeQuery( 'UPDATE p_players p SET p.hero_def = p.hero_def+1 WHERE p.id=%s', array( $playerId ) );
+		$this->provider->executeQuery( 'UPDATE p_players p SET p.hero_up_point =p.hero_up_point-1 WHERE p.id=%s',array($playerId ) );
+    }
     function decreaseGoldNum( $playerId, $goldCost )
     {
         $this->provider->executeQuery( 'UPDATE p_players p SET p.gold_num=p.gold_num-%s WHERE p.id=%s', array(

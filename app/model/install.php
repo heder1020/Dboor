@@ -194,6 +194,7 @@ CREATE TABLE `p_players` (
   `hero_points` bigint(20) DEFAULT \'0\',
   `hero_att` tinyint(4) DEFAULT \'0\',
   `hero_def` tinyint(4) DEFAULT \'0\',
+  `hero_up_point` tinyint(4) DEFAULT \'0\',
   `hero_name` varchar(300) DEFAULT NULL,
   `hero_in_village_id` bigint(20) DEFAULT NULL,
   `attack_points` bigint(20) DEFAULT \'0\',

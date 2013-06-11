@@ -1062,6 +1062,17 @@ class GPage extends VillagePage
                     return null;
                 }
             } else {
+				if( isset( $_GET['addAtt'] ) && $this->data['hero_up_point'] > 0 && $this->data['hero_att'] <= 100 ){
+					$m = new BuildModel();
+                    $m->addHeroAtt( $this->player->playerId );
+                    $m->dispose();
+					return null;
+				}elseif( isset( $_GET['addDef'] ) && $this->data['hero_up_point'] > 0 && $this->data['hero_def'] <= 100 ){
+					$m = new BuildModel();
+                    $m->addHeroDef( $this->player->playerId );
+                    $m->dispose();
+					return null;
+				}
                 if ( ( ( $this->isPost() && isset( $_POST['hname'] ) ) && trim( $_POST['hname'] ) != '' ) ) {
                     $this->data['hero_name'] = trim( $_POST['hname'] );
                     $m                       = new BuildModel();

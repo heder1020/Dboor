@@ -169,8 +169,10 @@ if ($this->selectedTabIndex == 0) {
 		<td class="xp"><img class="bar" src="img/x.gif" style="width:'.$this->data['hero_att'].'%;" 
 						alt="'.$this->data['hero_att'].'" title="'.$this->data['hero_att'].'" /></td> 
         <td class="up"><span class="none">';
-        if($this->data['hero_points'] > 0 && $this->data['hero_att'] < 100){ 
-            echo "<a href=\"\">(<b>+</b>)</a>"; 
+        if( $this->data['hero_up_point'] > 0 && $this->data['hero_att'] <= 100 ){ 
+            echo '<a href="build.php?id=';
+			echo $this->buildingIndex;
+			echo '&addAtt">(<b>+</b>)</a>'; 
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -181,8 +183,10 @@ if ($this->selectedTabIndex == 0) {
 		<td class="xp"><img class="bar" src="img/x.gif" style="width:'.$this->data['hero_def'].'%;" 
 						alt="'.$this->data['hero_def'].'" title="'.$this->data['hero_def'].'" /></td> 
         <td class="up"><span class="none">';
-        if($this->data['hero_points'] > 0 && $this->data['hero_def'] < 100){ 
-            echo "<a href=\"\">(<b>+</b>)</a>"; 
+        if( $this->data['hero_up_point'] > 0 && $this->data['hero_def'] <= 100 ){ 
+            echo '<a href="build.php?id=';
+			echo $this->buildingIndex;
+			echo '&addDef">(<b>+</b>)</a>'; 
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
