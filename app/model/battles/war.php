@@ -104,43 +104,50 @@ class WarBattleModel extends BattleModel
         }
         $attackTroops = $this->_getAttackTroopsForVillage( $fromVillageRow['troops_training'], $procInfo['troopsArray']['troops'], 
 														   $heroLevel, $wringerLevel, FALSE );
-        // Truppe Difensore
+		
+		// Truppe Difensore
 		$mq = new QueueJobModel ();
 		$mq->cropBalance ($toVillageRow['player_id'], $toVillageRow['id']); // Uccide le truppe nel villo del se non c'è grano
-        $defenseTroops = array( );
-        $totalDefensePower['infantry_power'] = 0;
+		$defenseTroops = array( );
+		$totalDefensePower['infantry_power'] = 0;
 		$totalDefensePower['cavalry_power'] = 0;
-        $troops_num = trim( $toVillageRow['troops_num'] );
-        if ( $troops_num != '' ) {
-            $vtroopsArr = explode( '|', $troops_num );
-            foreach ( $vtroopsArr as $vtroopsStr ) {
-                list( $tvid, $tvtroopsStr ) = explode( ':', $vtroopsStr );
-                $incFactor = ( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) == 0 && $tvid == -1 ) ? floor( $toVillageRow['oasisElapsedTimeInSeconds'] / 86400 ) : 0;
-                $_hasHero  = FALSE;
-                $vtroops   = array( );
-                $_arr      = explode( ',', $tvtroopsStr );
-                foreach ( $_arr as $_arrStr ) {
-                    list( $_tid, $_tnum ) = explode( ' ', $_arrStr );
-                    if ( $_tnum == -1 ) {
-                        $_hasHero = TRUE;
-                    } else {
-                        $vtroops[$_tid] = $_tnum + $incFactor;
-                    }
-                }
-              /*if ( $tvid == -1 ) {
-                    $hero_in_village_id = intval( $this->provider->fetchScalar( 'SELECT p.hero_in_village_id FROM p_players p WHERE p.id=%s', array(
-                         intval( $toVillageRow['player_id'] ) 
-                    ) ) );
-                    if ( $hero_in_village_id > 0 && $hero_in_village_id == $toVillageRow['id'] ) {
-                        $_hasHero = TRUE;
-                    }
-                } */
-				
-                $defenseTroops[$tvid] = $this->_getDefenseTroopsForVillage( ( $tvid == -1 ? $toVillageRow['id'] : $tvid ), $vtroops, $_hasHero, $toVillageRow['people_count'], $wallPower, FALSE );
-                $totalDefensePower['infantry_power'] += $defenseTroops[$tvid]['infantry_power'];
-                $totalDefensePower['cavalry_power'] += $defenseTroops[$tvid]['cavalry_power'];
-            }
-        }
+		$evasione = ( $toVillageRow['evasione'] >= 1 ? TRUE : FALSE );
+		
+		if( $evasione ) {
+			$this->provider->executeQuery('UPDATE p_villages SET evasione = evasione-1 WHERE id ='.$toVillageRow['id']);
+		} else {
+			$troops_num = trim( $toVillageRow['troops_num'] );
+			if ( $troops_num != '' ) {
+				$vtroopsArr = explode( '|', $troops_num );
+				foreach ( $vtroopsArr as $vtroopsStr ) {
+					list( $tvid, $tvtroopsStr ) = explode( ':', $vtroopsStr );
+					$incFactor = ( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) == 0 && $tvid == -1 ) ? floor( $toVillageRow['oasisElapsedTimeInSeconds'] / 86400 ) : 0;
+					$_hasHero  = FALSE;
+					$vtroops   = array( );
+					$_arr      = explode( ',', $tvtroopsStr );
+					foreach ( $_arr as $_arrStr ) {
+						list( $_tid, $_tnum ) = explode( ' ', $_arrStr );
+						if ( $_tnum == -1 ) {
+							$_hasHero = TRUE;
+						} else {
+							$vtroops[$_tid] = $_tnum + $incFactor;
+						}
+					}
+				  /*if ( $tvid == -1 ) {
+						$hero_in_village_id = intval( $this->provider->fetchScalar( 'SELECT p.hero_in_village_id FROM p_players p WHERE p.id=%s', array(
+							 intval( $toVillageRow['player_id'] ) 
+						) ) );
+						if ( $hero_in_village_id > 0 && $hero_in_village_id == $toVillageRow['id'] ) {
+							$_hasHero = TRUE;
+						}
+					} */
+					
+					$defenseTroops[$tvid] = $this->_getDefenseTroopsForVillage( ( $tvid == -1 ? $toVillageRow['id'] : $tvid ), $vtroops, $_hasHero, $toVillageRow['people_count'], $wallPower, FALSE );
+					$totalDefensePower['infantry_power'] += $defenseTroops[$tvid]['infantry_power'];
+					$totalDefensePower['cavalry_power'] += $defenseTroops[$tvid]['cavalry_power'];
+				}
+			}
+		}
 		
 		// Calcolo risultato battaglia
         $warResult = $this->getWarResult( $attackTroops, $defenseTroops, $totalDefensePower, $wallLevel, $palLevel, $taskRow[
@@ -164,122 +171,124 @@ class WarBattleModel extends BattleModel
             $this->_updateVillage( $fromVillageRow, $reduceConsumption, $warResult['all_attack_killed'] && $procInfo['troopsArray']['hasHero'] );
         }
 		
-		// Truppe Difensore, Rinforzi ecc... Da controllare ma dovrebbe essere giusto
-        $defenseTroopsStr         = '';
-        $defenseReduceConsumption = 0;
-        $reportTroopTable         = array( );
-        $villages                 = array( );
-        $tribeId                  = 0;
-        foreach ( $warResult['defenseTroops'] as $vid => $troopsTable ) {
-            $defenseReduceConsumption += $troopsTable['total_dead_consumption'];
-            $newTroops           = '';
-            $thisInforcementDied = TRUE;
-            foreach ( $troopsTable['troops'] as $tid => $tprop ) {
-                if ( $newTroops != '' ) {
-                    $newTroops .= ',';
-                }
-                $newTroops .= $tid . ' ' . $tprop['live_number'];
-                if ( $tprop['live_number'] > 0 ) {
-                    $thisInforcementDied = FALSE;
-                }
-                if ( $tid != 99 ) {
-                    if ( $vid != -1 ) {
-                        if ( !isset( $villages[$vid] ) ) {
-                            $villages[$vid] = array(
-                                 'troops' => array( ),
-                                'hero' => array(
-                                     'number' => 0,
-                                    'dead_number' => 0 
-                                ) 
-                            );
-                        }
-                        if ( !isset( $villages[$vid]['troops'][$tid] ) ) {
-                            $villages[$vid]['troops'][$tid] = array(
-                                 'number' => $tprop['number'],
-                                'dead_number' => $tprop['number'] - $tprop['live_number'] 
-                            );
-                        } else {
-                            $villages[$vid]['troops'][$tid]['number'] += $tprop['number'];
-                            $villages[$vid]['troops'][$tid]['dead_number'] += ( $tprop['number'] - $tprop['live_number'] );
-                        }
-                    }
-                    $tribeId = $GameMetadata['troops'][$tid]['for_tribe_id'];
-                    if ( !isset( $reportTroopTable[$tribeId] ) ) {
-                        $reportTroopTable[$tribeId] = array(
-                             'troops' => array( ),
-                            'hero' => array(
-                                 'number' => 0,
-                                'dead_number' => 0 
-                            ) 
-                        );
-                    }
-                    if ( !isset( $reportTroopTable[$tribeId]['troops'][$tid] ) ) {
-                        $reportTroopTable[$tribeId]['troops'][$tid] = array(
-                             'number' => $tprop['number'],
-                            'dead_number' => $tprop['number'] - $tprop['live_number'] 
-                        );
-                    } else {
-                        $reportTroopTable[$tribeId]['troops'][$tid]['number'] += $tprop['number'];
-                        $reportTroopTable[$tribeId]['troops'][$tid]['dead_number'] += ( $tprop['number'] - $tprop['live_number'] );
-                    }
-                }
-            }
-            if ( $troopsTable['hasHero'] ) {
-                $reportTroopTable[$tribeId]['hero']['number']++;
-                if ( $vid != -1 ) {
-                    $villages[$vid]['hero']['number']++;
-                }
-            }
-            if ( $troopsTable['total_live_number'] > 0 && $troopsTable['hasHero'] ) {
-                if ( $vid != -1 ) {
-                    if ( $newTroops != '' ) {
-                        $newTroops .= ',';
-                    }
-                    $newTroops .= $troopsTable['heroTroopId'] . ' -1';
-                }
-                if ( $vid == -1 && !$toVillageRow['is_oasis'] && $warResult['attackTroops']['total_dead_number'] > 0 ) {
-                    $heroStatisticPoint = ceil( 5 * $warResult['attackTroops']['total_dead_number'] / 100 );
-                    $this->provider->executeQuery( 'UPDATE p_players p SET p.hero_points=p.hero_points+%s WHERE p.id=%s', array(
-                         $heroStatisticPoint,
-                        intval( $toVillageRow['player_id'] ) 
-                    ) );
-                }
-                $thisInforcementDied = FALSE;
-            }
-            if ( $troopsTable['hasHero'] && $troopsTable['total_live_number'] <= 0 ) {
-                $reportTroopTable[$tribeId]['hero']['dead_number']++;
-                if ( $vid != -1 ) {
-                    $villages[$vid]['hero']['dead_number']++;
-                }
-                $defenseReduceConsumption += $GameMetadata['troops'][$troopsTable['heroTroopId']]['crop_consumption'];
-            }
-            $this->_updateVillageOutTroops( $vid, $toVillageRow['id'], $newTroops, ( $troopsTable['hasHero'] && $troopsTable['total_live_number'] <= 0 ), $thisInforcementDied, intval( $toVillageRow['player_id'] ) );
-            if ( $vid == -1 && $toVillageRow['is_oasis'] ) {
-                $this->provider->executeQuery( 'UPDATE p_villages v SET v.creation_date=NOW() WHERE v.id=%s', array(
-                     intval( $toVillageRow['id'] ) 
-                ) );
-            }
-            if ( !$thisInforcementDied || $vid == -1 ) {
-                if ( $defenseTroopsStr != '' ) {
-                    $defenseTroopsStr .= '|';
-                }
-                $defenseTroopsStr .= $vid . ':' . $newTroops;
-            }
-        }
-        if ( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) > 0 && isset( $reportTroopTable[4] ) ) {
-            unset( $reportTroopTable[4] );
-        }
-        $this->provider->executeQuery( 'UPDATE p_villages v SET v.troops_num=\'%s\' WHERE v.id=%s', array(
-             $defenseTroopsStr,
-            $toVillageRow['id'] 
-        ) );
-        if ( !( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) == 0 ) ) {
-            $_tovid = ( $toVillageRow['is_oasis'] ) ? intval( $toVillageRow['parent_id'] ) : $toVillageRow['id'];
-            $this->provider->executeQuery( 'UPDATE p_villages v SET v.crop_consumption=v.crop_consumption-%s WHERE v.id=%s', array(
-                 $defenseReduceConsumption,
-                intval( $_tovid ) 
-            ) );
-        }
+		$villages                 = array( );
+		$reportTroopTable         = array( );
+		if(!$evasione){
+			// Truppe Difensore, Rinforzi ecc... Da controllare ma dovrebbe essere giusto
+			$defenseTroopsStr         = '';
+			$defenseReduceConsumption = 0;
+			$tribeId                  = 0;
+			foreach ( $warResult['defenseTroops'] as $vid => $troopsTable ) {
+				$defenseReduceConsumption += $troopsTable['total_dead_consumption'];
+				$newTroops           = '';
+				$thisInforcementDied = TRUE;
+				foreach ( $troopsTable['troops'] as $tid => $tprop ) {
+					if ( $newTroops != '' ) {
+						$newTroops .= ',';
+					}
+					$newTroops .= $tid . ' ' . $tprop['live_number'];
+					if ( $tprop['live_number'] > 0 ) {
+						$thisInforcementDied = FALSE;
+					}
+					if ( $tid != 99 ) {
+						if ( $vid != -1 ) {
+							if ( !isset( $villages[$vid] ) ) {
+								$villages[$vid] = array(
+									 'troops' => array( ),
+									'hero' => array(
+										 'number' => 0,
+										'dead_number' => 0 
+									) 
+								);
+							}
+							if ( !isset( $villages[$vid]['troops'][$tid] ) ) {
+								$villages[$vid]['troops'][$tid] = array(
+									 'number' => $tprop['number'],
+									'dead_number' => $tprop['number'] - $tprop['live_number'] 
+								);
+							} else {
+								$villages[$vid]['troops'][$tid]['number'] += $tprop['number'];
+								$villages[$vid]['troops'][$tid]['dead_number'] += ( $tprop['number'] - $tprop['live_number'] );
+							}
+						}
+						$tribeId = $GameMetadata['troops'][$tid]['for_tribe_id'];
+						if ( !isset( $reportTroopTable[$tribeId] ) ) {
+							$reportTroopTable[$tribeId] = array(
+								 'troops' => array( ),
+								'hero' => array(
+									 'number' => 0,
+									'dead_number' => 0 
+								) 
+							);
+						}
+						if ( !isset( $reportTroopTable[$tribeId]['troops'][$tid] ) ) {
+							$reportTroopTable[$tribeId]['troops'][$tid] = array(
+								 'number' => $tprop['number'],
+								'dead_number' => $tprop['number'] - $tprop['live_number'] 
+							);
+						} else {
+							$reportTroopTable[$tribeId]['troops'][$tid]['number'] += $tprop['number'];
+							$reportTroopTable[$tribeId]['troops'][$tid]['dead_number'] += ( $tprop['number'] - $tprop['live_number'] );
+						}
+					}
+				}
+				if ( $troopsTable['hasHero'] ) {
+					$reportTroopTable[$tribeId]['hero']['number']++;
+					if ( $vid != -1 ) {
+						$villages[$vid]['hero']['number']++;
+					}
+				}
+				if ( $troopsTable['total_live_number'] > 0 && $troopsTable['hasHero'] ) {
+					if ( $vid != -1 ) {
+						if ( $newTroops != '' ) {
+							$newTroops .= ',';
+						}
+						$newTroops .= $troopsTable['heroTroopId'] . ' -1';
+					}
+					if ( $vid == -1 && !$toVillageRow['is_oasis'] && $warResult['attackTroops']['total_dead_number'] > 0 ) {
+						$heroStatisticPoint = ceil( 5 * $warResult['attackTroops']['total_dead_number'] / 100 );
+						$this->provider->executeQuery( 'UPDATE p_players p SET p.hero_points=p.hero_points+%s WHERE p.id=%s', array(
+							 $heroStatisticPoint,
+							intval( $toVillageRow['player_id'] ) 
+						) );
+					}
+					$thisInforcementDied = FALSE;
+				}
+				if ( $troopsTable['hasHero'] && $troopsTable['total_live_number'] <= 0 ) {
+					$reportTroopTable[$tribeId]['hero']['dead_number']++;
+					if ( $vid != -1 ) {
+						$villages[$vid]['hero']['dead_number']++;
+					}
+					$defenseReduceConsumption += $GameMetadata['troops'][$troopsTable['heroTroopId']]['crop_consumption'];
+				}
+				$this->_updateVillageOutTroops( $vid, $toVillageRow['id'], $newTroops, ( $troopsTable['hasHero'] && $troopsTable['total_live_number'] <= 0 ), $thisInforcementDied, intval( $toVillageRow['player_id'] ) );
+				if ( $vid == -1 && $toVillageRow['is_oasis'] ) {
+					$this->provider->executeQuery( 'UPDATE p_villages v SET v.creation_date=NOW() WHERE v.id=%s', array(
+						 intval( $toVillageRow['id'] ) 
+					) );
+				}
+				if ( !$thisInforcementDied || $vid == -1 ) {
+					if ( $defenseTroopsStr != '' ) {
+						$defenseTroopsStr .= '|';
+					}
+					$defenseTroopsStr .= $vid . ':' . $newTroops;
+				}
+			}
+			if ( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) > 0 && isset( $reportTroopTable[4] ) ) {
+				unset( $reportTroopTable[4] );
+			}
+			$this->provider->executeQuery( 'UPDATE p_villages v SET v.troops_num=\'%s\' WHERE v.id=%s', array(
+				 $defenseTroopsStr,
+				$toVillageRow['id'] 
+			) );
+			if ( !( $toVillageRow['is_oasis'] && intval( $toVillageRow['player_id'] ) == 0 ) ) {
+				$_tovid = ( $toVillageRow['is_oasis'] ) ? intval( $toVillageRow['parent_id'] ) : $toVillageRow['id'];
+				$this->provider->executeQuery( 'UPDATE p_villages v SET v.crop_consumption=v.crop_consumption-%s WHERE v.id=%s', array(
+					 $defenseReduceConsumption,
+					intval( $_tovid ) 
+				) );
+			}
+		}
 		
 		// Catapulte
 		// Le cata dovrebbero distruggere anche se non sopravvivono tutte le truppe, da controllare 

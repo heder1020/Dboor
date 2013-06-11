@@ -254,6 +254,7 @@ CREATE TABLE `p_villages` (
   `troops_intrap_num` text,
   `troops_out_intrap_num` text,
   `troops_trapped_num` int(11) DEFAULT \'0\',
+  `evasione` tinyint(4) DEFAULT \'0\',
   `allegiance_percent` int(11) DEFAULT \'100\',
   `child_villages_id` text,
   `village_oases_id` text,

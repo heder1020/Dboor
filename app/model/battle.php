@@ -387,6 +387,7 @@ class BattleModel extends ModelBase
 				v.allegiance_percent, 
 				v.child_villages_id,
 				v.artifact_id,
+				v.evasione,
 				TIME_TO_SEC(TIMEDIFF(NOW(), v.last_update_date)) elapsedTimeInSeconds,
 				TIME_TO_SEC(TIMEDIFF(NOW(), v.creation_date)) oasisElapsedTimeInSeconds
 			FROM p_villages v 
