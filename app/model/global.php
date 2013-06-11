@@ -94,6 +94,7 @@ class GlobalModel extends ModelBase
 				v.child_villages_id, v.village_oases_id,
 				v.offer_merchants_count,
 				v.update_key,
+				v.evasione,
 				TIME_TO_SEC(TIMEDIFF(NOW(), v.last_update_date)) elapsedTimeInSeconds
 			FROM p_villages v
 			WHERE v.id=%s', array(
