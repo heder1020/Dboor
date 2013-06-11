@@ -372,204 +372,399 @@ $GameMetadata  = array(
         ),
         array(
              'level' => 1,
-            'xp' => 50 
+            'xp' => 100 
         ),
         array(
              'level' => 2,
-            'xp' => 150 
-        ),
-        array(
-             'level' => 3,
             'xp' => 300 
         ),
         array(
+             'level' => 3,
+            'xp' => 600 
+        ),
+        array(
              'level' => 4,
-            'xp' => 500 
+            'xp' => 1000 
         ),
         array(
              'level' => 5,
-            'xp' => 750 
+            'xp' => 1500 
         ),
         array(
              'level' => 6,
-            'xp' => 1050 
+            'xp' => 2100 
         ),
         array(
              'level' => 7,
-            'xp' => 1400 
+            'xp' => 2800 
         ),
         array(
              'level' => 8,
-            'xp' => 1800 
+            'xp' => 3600 
         ),
         array(
              'level' => 9,
-            'xp' => 2250 
+            'xp' => 4500 
         ),
         array(
              'level' => 10,
-            'xp' => 2750 
+            'xp' => 5500 
         ),
         array(
              'level' => 11,
-            'xp' => 3300 
+            'xp' => 6600 
         ),
         array(
              'level' => 12,
-            'xp' => 3900 
+            'xp' => 7800 
         ),
         array(
              'level' => 13,
-            'xp' => 4550 
+            'xp' => 9100 
         ),
         array(
              'level' => 14,
-            'xp' => 5250 
-        ),
-        array(
-             'level' => 15,
-            'xp' => 6000 
-        ),
-        array(
-             'level' => 16,
-            'xp' => 6800 
-        ),
-        array(
-             'level' => 17,
-            'xp' => 7650 
-        ),
-        array(
-             'level' => 18,
-            'xp' => 8550 
-        ),
-        array(
-             'level' => 19,
-            'xp' => 9500 
-        ),
-        array(
-             'level' => 20,
             'xp' => 10500 
         ),
         array(
+             'level' => 15,
+            'xp' => 12000 
+        ),
+        array(
+             'level' => 16,
+            'xp' => 13600 
+        ),
+        array(
+             'level' => 17,
+            'xp' => 15300 
+        ),
+        array(
+             'level' => 18,
+            'xp' => 17100 
+        ),
+        array(
+             'level' => 19,
+            'xp' => 19000 
+        ),
+        array(
+             'level' => 20,
+            'xp' => 21000 
+        ),
+        array(
              'level' => 21,
-            'xp' => 11550 
+            'xp' => 23100 
         ),
         array(
              'level' => 22,
-            'xp' => 12650 
+            'xp' => 25300 
         ),
         array(
              'level' => 23,
-            'xp' => 13800 
+            'xp' => 27600 
         ),
         array(
              'level' => 24,
-            'xp' => 15000 
+            'xp' => 30000 
         ),
         array(
              'level' => 25,
-            'xp' => 16250 
+            'xp' => 32500 
         ),
         array(
              'level' => 26,
-            'xp' => 17550 
+            'xp' => 35100 
         ),
         array(
              'level' => 27,
-            'xp' => 18900 
+            'xp' => 37800 
         ),
         array(
              'level' => 28,
-            'xp' => 20300 
+            'xp' => 40600 
         ),
         array(
              'level' => 29,
-            'xp' => 21750 
+            'xp' => 43500 
         ),
         array(
              'level' => 30,
-            'xp' => 23250 
+            'xp' => 46500 
         ),
         array(
              'level' => 31,
-            'xp' => 24800 
+            'xp' => 49600 
         ),
         array(
              'level' => 32,
-            'xp' => 26400 
+            'xp' => 52800 
         ),
         array(
              'level' => 33,
-            'xp' => 28050 
+            'xp' => 56100 
         ),
         array(
              'level' => 34,
-            'xp' => 29750 
+            'xp' => 59500 
         ),
         array(
              'level' => 35,
-            'xp' => 31500 
+            'xp' => 63000 
         ),
         array(
              'level' => 36,
-            'xp' => 33300 
+            'xp' => 66600 
         ),
         array(
              'level' => 37,
-            'xp' => 35150 
+            'xp' => 70300 
         ),
         array(
              'level' => 38,
-            'xp' => 37050 
+            'xp' => 74100 
         ),
         array(
              'level' => 39,
-            'xp' => 39000 
+            'xp' => 78000 
         ),
         array(
              'level' => 40,
-            'xp' => 41000 
+            'xp' => 82000 
         ),
         array(
              'level' => 41,
-            'xp' => 43050 
+            'xp' => 86100 
         ),
         array(
              'level' => 42,
-            'xp' => 45150 
+            'xp' => 90300 
         ),
         array(
              'level' => 43,
-            'xp' => 47300 
+            'xp' => 94600 
         ),
         array(
              'level' => 44,
-            'xp' => 49500 
+            'xp' => 99000 
         ),
         array(
              'level' => 45,
-            'xp' => 51750 
+            'xp' => 103500 
         ),
         array(
              'level' => 46,
-            'xp' => 54050 
+            'xp' => 108100 
         ),
         array(
              'level' => 47,
-            'xp' => 56400 
+            'xp' => 112800 
         ),
         array(
              'level' => 48,
-            'xp' => 58800 
+            'xp' => 117600 
         ),
         array(
              'level' => 49,
-            'xp' => 61250 
+            'xp' => 122500 
         ),
         array(
              'level' => 50,
-            'xp' => 63750 
-        ) 
+            'xp' => 127500 
+        ),
+		array(
+             'level' => 51,
+            'xp' => 132600 
+        ),
+		array(
+             'level' => 52,
+            'xp' => 137800 
+        ),
+		array(
+             'level' => 53,
+            'xp' => 143100 
+        ),
+		array(
+             'level' => 54,
+            'xp' => 148500 
+        ),
+		array(
+             'level' => 55,
+            'xp' => 154000 
+        ),
+		array(
+             'level' => 56,
+            'xp' => 159600 
+        ),
+		array(
+             'level' => 57,
+            'xp' => 165300 
+        ),
+		array(
+             'level' => 58,
+            'xp' => 171100 
+        ),
+		array(
+             'level' => 59,
+            'xp' => 177000 
+        ),
+		array(
+             'level' => 60,
+            'xp' => 183000 
+        ),
+		array(
+             'level' => 61,
+            'xp' => 189100 
+        ),
+		array(
+             'level' => 62,
+            'xp' => 195300 
+        ),
+		array(
+             'level' => 63,
+            'xp' => 201600 
+        ),
+		array(
+             'level' => 64,
+            'xp' => 208000 
+        ),
+		array(
+             'level' => 65,
+            'xp' => 214500 
+        ),array(
+             'level' => 66,
+            'xp' => 221100 
+        ),array(
+             'level' => 67,
+            'xp' => 227800 
+        ),
+		array(
+             'level' => 68,
+            'xp' => 234600 
+        ),
+		array(
+             'level' => 69,
+            'xp' => 241500 
+        ),
+		array(
+             'level' => 70,
+            'xp' => 248500 
+        ),
+		array(
+             'level' => 71,
+            'xp' => 255600 
+        ),
+		array(
+             'level' => 72,
+            'xp' => 262800 
+        ),
+		array(
+             'level' => 73,
+            'xp' => 270100 
+        ),
+		array(
+             'level' => 74,
+            'xp' => 277500 
+        ),
+		array(
+             'level' => 75,
+            'xp' => 285000 
+        ),
+		array(
+             'level' => 76,
+            'xp' => 292600 
+        ),
+		array(
+             'level' => 77,
+            'xp' => 300300 
+        ),
+		array(
+             'level' => 78,
+            'xp' => 308100 
+        ),
+		array(
+             'level' => 79,
+            'xp' => 316000 
+        ),
+		array(
+             'level' => 80,
+            'xp' => 324000 
+        ),
+		array(
+             'level' => 81,
+            'xp' => 332100 
+        ),
+		array(
+             'level' => 82,
+            'xp' => 340300 
+        ),
+		array(
+             'level' => 83,
+            'xp' => 348600 
+        ),
+		array(
+             'level' => 84,
+            'xp' => 357000 
+        ),
+		array(
+             'level' => 85,
+            'xp' => 365500 
+        ),
+		array(
+             'level' => 86,
+            'xp' => 374100 
+        ),
+		array(
+             'level' => 87,
+            'xp' => 382800 
+        ),
+		array(
+             'level' => 88,
+            'xp' => 391600 
+        ),
+		array(
+             'level' => 89,
+            'xp' => 400500 
+        ),
+		array(
+             'level' => 90,
+            'xp' => 409500 
+        ),
+		array(
+             'level' => 91,
+            'xp' => 418600 
+        ),
+		array(
+             'level' => 92,
+            'xp' => 427800 
+        ),
+		array(
+             'level' => 93,
+            'xp' => 437100 
+        ),
+		array(
+             'level' => 94,
+            'xp' => 446500 
+        ),
+		array(
+             'level' => 95,
+            'xp' => 456000 
+        ),
+		array(
+             'level' => 96,
+            'xp' => 465600 
+        ),
+		array(
+             'level' => 97,
+            'xp' => 475300 
+        ),
+		array(
+             'level' => 98,
+            'xp' => 485100 
+        ),
+		array(
+             'level' => 99,
+            'xp' => 495000 
+        )
+		
     ),
     'plusTable' => array(
          array(
