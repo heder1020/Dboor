@@ -2,7 +2,7 @@
 p.custDir {text-align:left;direction:ltr;}
 img{border:0;}h1,h2,span,form,img,li{margin:0;padding:0;}h1{margin-bottom:8px;}p{margin:14px 0;padding:0;}
 label{white-space:nowrap;}#msfilter{width:1px;height:1px;position:absolute;z-index:99;}
-.hide{display:none;}div#header{width:100%;min-width:980px;height:67px;}div#mid{float:left;width:100%;min-width:980px;margin-bottom:15px;}
+.hide{display:none;}div#header{width:100%;min-width:980px;height:67px;}div#mid{float:left;width:100%;min-width:1100px;margin-bottom:15px;}
 div#content{float:left;min-height:450px;position:relative;overflow:hidden;}div.universal{width:502px;padding:0 25px 0;}
 div.login{width:502px;padding:0 25px 0;}div.logout{width:502px;padding:0 25px 0;}
 div.signup{width:502px;padding:0 25px 0;}div.activate{width:502px;padding:0 25px 0;}
@@ -12,7 +12,7 @@ div.statistics{width:502px;padding:43px 25px 0;}div.cropfinder{width:502px;paddi
 div.reports{width:502px;padding:43px 25px 0;}div.messages{width:502px;padding:43px 25px 0;}
 div.a2b{width:502px;padding:43px 25px 0;}div.village3{width:502px;padding:43px 25px 0;}
 div.plus{width:502px;padding:43px 25px 0;}div.warsim{width:502px;padding:43px 25px 0;}
-div.map{width:552px;padding:43px 0 0;}div.support{width:502px;padding:15px 25px 0;}
+div.map{width:652px;padding:43px 0 0;}div.support{width:502px;padding:15px 25px 0;}
 div.village1{width:537px;padding-top:43px;padding-left:0;padding-bottom:0;padding-left:15px;}
 div.village2{width:540px;padding:43px 6px 0;}div.build{width:552px;}div#build{width:502px;padding:43px 25px 0;}
 div.error_site{width:552px;padding:0;}p.btn{text-align:center;}div#textmenu{margin:14px 0;}
@@ -1235,7 +1235,7 @@ div.village1 div#village_map img.level7,div.village1 div#village_map img.level17
 div.village1 div#village_map img.level8,div.village1 div#village_map img.level18{background-position:-119px 0;}
 div.village1 div#village_map img.level9,div.village1 div#village_map img.level19{background-position:-136px 0;}
 div.village1 div#village_map img.level10,div.village1 div#village_map img.level20{background-position:-153px 0;}
-div.map img#detailed_map{width:300px;height:264px;}div.map img.w1{background-image:url(../../img/m/w1.jpg);}
+div.map img#detailed_map{width:400px;height:404px;}div.map img.w1{background-image:url(../../img/m/w1.jpg);}
 div.map img.w2{background-image:url(../../img/m/w2.jpg);}div.map img.w3{background-image:url(../../img/m/w3.jpg);}
 div.map img.w4{background-image:url(../../img/m/w4.jpg);}div.map img.w5{background-image:url(../../img/m/w5.jpg);}
 div.map img.w6{background-image:url(../../img/m/w6.jpg);}div.map img.w7{background-image:url(../../img/m/w7.jpg);}

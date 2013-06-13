@@ -485,7 +485,14 @@ INSERT INTO `g_summary`(`players_count`,`active_players_count`,`Arab_players_cou
                         $rand_num = ( $pr == 1 ? abs( $rel_x ) + abs( $rel_y ) : 310 );
                     }
                 } else {
-                    $image_num     = mt_rand( 1, 12 );
+					$nuoveOasi = FALSE;
+					while(!$nuoveOasi){
+                    	$image_num     = mt_rand( 1, 12 );
+						if( $image_num == 1 || $image_num == 3 || $image_num == 4 || $image_num == 6 || $image_num == 7
+						    || $image_num == 9 || $image_num == 10 || $image_num == 12){
+							$nuoveOasi = TRUE;
+						}
+					}
                     $is_oasis      = 1;
                     $tribe_id      = 4;
                     $creation_date = 'NOW()';
